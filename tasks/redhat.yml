@@ -1,0 +1,8 @@
+---
+
+- name: yum | Install rsyslog server
+  yum: name=rsyslog state=present
+
+- name: enable and start rsyslog service
+  service: name=rsyslog state=started enabled=yes
+

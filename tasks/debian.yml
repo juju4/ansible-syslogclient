@@ -1,0 +1,4 @@
+---
+- name: apt | rsyslog install
+  apt: name=rsyslog state=present
+

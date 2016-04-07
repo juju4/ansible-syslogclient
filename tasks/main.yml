@@ -1,0 +1,14 @@
+---
+
+- include: debian.yml
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+
+- include: redhat.yml
+  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
+- name: logging to remote syslog
+  template: src=10-remotesyslog dest=/etc/rsyslog.d/10-remotesyslog owner=root group=root mode=0644
+  notify:
+    - restart rsyslog
+  when: syslogclient_server is defined
