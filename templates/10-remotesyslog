@@ -1,1 +1,22 @@
+{% if syslogclient_use_tcp is defined and syslogclient_use_tcp %}
+{% if syslogclient_use_tls is defined and syslogclient_use_tls %}
+## from http://www.rsyslog.com/doc/v8-stable/tutorials/tls_cert_client.html
+# make gtls driver the default
+$DefaultNetstreamDriver gtls
+
+# certificate files
+$DefaultNetstreamDriverCAFile {{ syslogclient_tls_ca }}
+$DefaultNetstreamDriverCertFile {{ syslogclient_tls_cert }}
+$DefaultNetstreamDriverKeyFile {{ syslogclient_tls_key }}
+
+$ActionSendStreamDriverAuthMode x509/name
+$ActionSendStreamDriverPermittedPeer {{ syslogclient_server }}
+$ActionSendStreamDriverMode 1 # run driver in TLS-only mode
+{% endif %}
+*.*     @@{{ syslogclient_server }}
+{% elif syslogclient_use_json is defined and syslogclient_use_json %}
+*.*     @{{ syslogclient_server }};json-template
+{% else %}
 *.*     @{{ syslogclient_server }}
+{% endif %}
+

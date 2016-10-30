@@ -6,9 +6,41 @@
 - include: redhat.yml
   when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
+- include: alpine.yml
+  when: ansible_distribution == 'Alpine'
+
+- name: enable and start rsyslog service
+  service: name=rsyslog state=started enabled=yes
+
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
-- name: logging to remote syslog
-  template: src=10-remotesyslog dest=/etc/rsyslog.d/10-remotesyslog owner=root group=root mode=0644
+- block:
+    - debug: var=syslogclient_server
+    - name: logging to remote syslog
+      template: src=10-remotesyslog dest=/etc/rsyslog.d/10-remotesyslog.conf owner=root group=root mode=0644
+      notify:
+        - restart rsyslog
+  when: syslogclient_server is defined
+
+- debug: var=ansible_virtualization_type
+- name: container config cleaning
+  replace: "dest={{ item.f }} regexp={{ item.re }} replace={{ item.rep }} backup=yes"
+  with_items:
+    - { f: '/etc/rsyslog.d/50-default.conf', re: "^daemon\\.\\*;mail\\.\\*;", rep: "#daemon.*;mail.*;" }
+    - { f: '/etc/rsyslog.d/50-default.conf', re: "^\tnews.err;", rep: "#\tnews.err;" }
+    - { f: '/etc/rsyslog.d/50-default.conf', re: "^\t\\*\\.=debug;\\*\\.=info;", rep: "#\t*.=debug;*.=info;" }
+    - { f: '/etc/rsyslog.d/50-default.conf', re: "^\t\\*\\.=notice;\\*\\.=warn\t\\|/dev/xconsole", rep: "#\t*.=notice;*.=warn\t|/dev/xconsole" }
+    - { f: '/etc/rsyslog.conf', re: '^\$KLogPermitNonKernelFacility on', rep: '#$KLogPermitNonKernelFacility on' }
+    - { f: '/etc/rsyslog.conf', re: '^module\(load="imklog"\)', rep: '#module(load="imklog")' }
+## FIXME! when enabled, kills all logging ...
+#    - { f: '/etc/rsyslog.d/21-cloudinit.conf', re: '^\\& \\~', rep: 'stop' }
   notify:
     - restart rsyslog
-  when: syslogclient_server is defined
+  when: (ansible_virtualization_type is defined and (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")) and ansible_os_family == "Debian"
+
+- block:
+    - name: logging to remote syslog in json
+      template: src=01-json-template dest=/etc/rsyslog.d/01-json-template.conf owner=root group=root mode=0644
+      notify:
+        - restart rsyslog
+  when: syslogclient_use_json is defined and syslogclient_use_json
+
