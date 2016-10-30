@@ -13,6 +13,7 @@
   service: name=rsyslog state=started enabled=yes
 
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
+## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
 - block:
     - debug: var=syslogclient_server
     - name: logging to remote syslog
