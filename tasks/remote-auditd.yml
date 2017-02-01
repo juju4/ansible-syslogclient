@@ -2,8 +2,12 @@
 
 ## http://wiki.rsyslog.com/index.php/Centralizing_the_audit_log
 
-- name: ensure auditd is present
+- name: Debian | ensure auditd is present
   package: name=auditd state=present
+  when: ansible_os_family == 'Debian'
+- name: RedHat | ensure auditd is present
+  package: name=audit state=present
+  when: ansible_os_family == 'RedHat'
 
 - name: ensure audisp syslog is active
   replace:
