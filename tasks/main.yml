@@ -45,3 +45,6 @@
         - restart rsyslog
   when: syslogclient_use_json is defined and syslogclient_use_json
 
+- include: remote-auditd.yml
+  when: syslogclient_forward_auditd
+

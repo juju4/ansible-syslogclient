@@ -1,0 +1,14 @@
+---
+
+## http://wiki.rsyslog.com/index.php/Centralizing_the_audit_log
+
+- name: ensure auditd is present
+  package: name=auditd state=present
+
+- name: ensure audisp syslog is active
+  replace:
+    dest: /etc/audisp/plugins.d/syslog.conf
+    regexp: '^active = .*'
+    replace: '^active = yes'
+    backup: yes
+
