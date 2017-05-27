@@ -13,6 +13,8 @@
   replace:
     dest: /etc/audisp/plugins.d/syslog.conf
     regexp: '^active = .*'
-    replace: '^active = yes'
+    replace: 'active = yes'
     backup: yes
-
+  notify:
+    - restart auditd
+    - restart auditd - rhel7

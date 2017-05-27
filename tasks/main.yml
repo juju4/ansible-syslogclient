@@ -20,7 +20,7 @@
       template: src=10-remotesyslog dest=/etc/rsyslog.d/10-remotesyslog.conf owner=root group=root mode=0644
       notify:
         - restart rsyslog
-  when: syslogclient_server is defined
+  when: syslogclient_server is defined and syslogclient_server != ''
 
 - debug: var=ansible_virtualization_type
 - name: container config cleaning
