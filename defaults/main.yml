@@ -4,6 +4,7 @@ syslogclient_server: 10.1.1.1
 #syslogclient_server: 10.1.1.1:514
 syslogclient_use_tcp: false
 syslogclient_forward_auditd: true
+#syslogclient_audispd_syslog_target: '@@192.168.100.100'
 ## forwarding to logstash?
 syslogclient_use_json: false
 

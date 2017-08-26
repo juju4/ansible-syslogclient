@@ -9,6 +9,15 @@
   package: name=audit state=present
   when: ansible_os_family == 'RedHat'
 
+- name: use dedicate log and syslog target for audisp
+  template:
+    src: rsyslog-audispd.conf.j2
+    dest: /etc/rsyslog.d/40-audispd.conf
+    mode: '0644'
+    backup: yes
+  notify:
+    - restart rsyslog
+
 - name: ensure audisp syslog is active
   replace:
     dest: /etc/audisp/plugins.d/syslog.conf
