@@ -12,6 +12,11 @@
 - name: enable and start rsyslog service
   service: name=rsyslog state=started enabled=yes
 
+- name: get rsyslog version
+  command: "rsyslogd -v | awk -F'[ ,]' '/rsyslogd/ { print $2 }'"
+  changed_when: false
+  register: rsyslog_v
+
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
 - block:
