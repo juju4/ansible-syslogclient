@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 {% if syslogclient_use_tcp is defined and syslogclient_use_tcp %}
 {% if syslogclient_use_tls is defined and syslogclient_use_tls %}
 ## from http://www.rsyslog.com/doc/v8-stable/tutorials/tls_cert_client.html
