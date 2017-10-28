@@ -12,6 +12,7 @@ It was tested on the following versions:
  * 1.9
  * 2.0
  * 2.2
+ * 2.4
 
 ### Operating systems
 
@@ -53,6 +54,9 @@ $ vagrant ssh
 
 ## Troubleshooting & Known issues
 
+## Other references
+
+* https://insights.ubuntu.com/wp-content/uploads/Whitepaper-CentralisedLogging-v11.pdf
 
 ## License
 
