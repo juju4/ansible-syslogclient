@@ -8,6 +8,19 @@ syslogclient_forward_auditd: true
 ## forwarding to logstash?
 syslogclient_use_json: false
 
+syslogclient_highprecisiontimestamp: true
+
+# http://www.rsyslog.com/what-are-trusted-properties/
+syslogclient_trusted_properties: false
+
+#rsyslog_conf_d:
+#  - rsyslog-custom.conf
+
+## logrotate:
+syslogclient_logrotate_compress: true
+syslogclient_logrotate_datext: true
+syslogclient_logrotate_datformat: '-%Y-%m-%d.log'
+
 ## only valid with tcp (Work in progress option)
 syslogclient_use_tls: false
 syslogclient_tls_ca: /rsyslog/protected/ca.pem
