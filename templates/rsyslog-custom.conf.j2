@@ -1,0 +1,11 @@
+{% if syslogclient_trusted_properties %}
+$SystemLogSocketAnnotate on # add _UID and other usefull properties
+$SystemLogParseTrusted on # Add trusted properties
+{% endif %}
+
+# timestamp?
+# https://unix.stackexchange.com/questions/103218/add-year-to-entries-generated-by-rsyslogd
+# https://github.com/rsyslog/rsyslog/issues/65
+template FullTimeFormat,"%timestamp:::date-year%-%timestamp:::date-month%-%timestamp:::date-day% %timestamp:::date-hour%:%timestamp:::date-minute%:%timestamp:::date-second% %timestamp:::date-tzoffsdirection%%timestamp:::date-tzoffshour%:%timestamp:::date-tzoffsmin% %HOSTNAME% %syslogtag% %msg%"
+#*.*             /var/log/custom.log;FullTimeFormat
+*.*             /var/log/custom.log;RSYSLOG_SyslogProtocol23Format
