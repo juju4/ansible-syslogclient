@@ -1,0 +1,24 @@
+---
+
+- name: Configure logrotate compress
+  lineinfile:
+    dest: /etc/logrotate.d/rsyslog
+    regexp: "{{ item.re }}"
+    line: "{{ item.l }}"
+    backup: yes
+    insertafter: '^\s+notifempty'
+  with_items:
+    - { re: '^\s+compress', l: '    compress' }
+  when: syslogclient_logrotate_compress
+
+- name: Configure logrotate dateext
+  lineinfile:
+    dest: /etc/logrotate.d/rsyslog
+    regexp: "{{ item.re }}"
+    line: "{{ item.l }}"
+    backup: yes
+    insertafter: '^\s+notifempty'
+  with_items:
+    - { re: '^\s+dateext', l: '    dateext' }
+    - { re: '^\s+dateformat', l: "    dateformat {{ syslogclient_logrotate_datformat }}" }
+  when: syslogclient_logrotate_datext
