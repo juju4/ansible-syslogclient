@@ -1,0 +1,3 @@
+---
+
+_logrotate_syslog_cfg: /etc/logrotate.d/syslog

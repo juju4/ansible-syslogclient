@@ -1,0 +1,51 @@
+/var/log/syslog
+{
+        rotate {{ syslogclient_logrotate_rotate }}
+        {{ syslogclient_logrotate_period }}
+        missingok
+        notifempty
+	su root syslog
+{% if syslogclient_logrotate_compress %}
+        compress
+        delaycompress
+{% endif %}
+{% if syslogclient_logrotate_datext %}
+        dateext
+        dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
+}
+
+/var/log/mail.info
+/var/log/mail.warn
+/var/log/mail.err
+/var/log/mail.log
+/var/log/daemon.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/lpr.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+{
+        rotate {{ syslogclient_logrotate_rotate }}
+        {{ syslogclient_logrotate_period }}
+        missingok
+        notifempty
+	su root syslog
+{% if syslogclient_logrotate_compress %}
+        compress
+        delaycompress
+{% endif %}
+{% if syslogclient_logrotate_datext %}
+        dateext
+        dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%
+        sharedscripts
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
+}

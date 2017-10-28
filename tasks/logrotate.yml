@@ -5,27 +5,10 @@
     name: logrotate
     state: present
 
-- name: Configure logrotate compress
-  lineinfile:
-    dest: /etc/logrotate.d/rsyslog
-    regexp: "{{ item.re }}"
-    line: "{{ item.l }}"
+- name: Configure logrotate
+  template:
+    src: "{{ syslogclient_logrotate_syslog_template }}"
+    dest: "{{ _logrotate_syslog_cfg }}"
+    mode: '0644'
     backup: yes
-    insertafter: '^\s+notifempty'
     validate: 'logrotate -dv %s'
-  with_items:
-    - { re: '^\s+compress', l: '    compress' }
-  when: syslogclient_logrotate_compress
-
-- name: Configure logrotate dateext
-  lineinfile:
-    dest: /etc/logrotate.d/rsyslog
-    regexp: "{{ item.re }}"
-    line: "{{ item.l }}"
-    backup: yes
-    insertafter: '^\s+notifempty'
-    validate: 'logrotate -dv %s'
-  with_items:
-    - { re: '^\s+dateext', l: '    dateext' }
-    - { re: '^\s+dateformat', l: "    dateformat {{ syslogclient_logrotate_datformat }}" }
-  when: syslogclient_logrotate_datext

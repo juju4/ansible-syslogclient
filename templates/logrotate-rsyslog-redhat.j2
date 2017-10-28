@@ -1,0 +1,23 @@
+/var/log/cron
+/var/log/maillog
+/var/log/messages
+/var/log/secure
+/var/log/spooler
+{
+    rotate {{ syslogclient_logrotate_rotate }}
+    {{ syslogclient_logrotate_period }}
+    notifempty
+    missingok
+{% if syslogclient_logrotate_compress %}
+    compress
+    delaycompress
+{% endif %}
+{% if syslogclient_logrotate_datext %}
+    dateext
+    dateformat {{ syslogclient_logrotate_datformat }}
+{% endif %}
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}

@@ -17,6 +17,9 @@ syslogclient_trusted_properties: false
 #  - rsyslog-custom.conf
 
 ## logrotate:
+syslogclient_logrotate_syslog_template: "logrotate-rsyslog-{{ ansible_os_family | lower }}.j2"
+syslogclient_logrotate_period: 'daily'
+syslogclient_logrotate_rotate: 90
 syslogclient_logrotate_compress: true
 syslogclient_logrotate_datext: true
 syslogclient_logrotate_datformat: '-%Y-%m-%d.log'

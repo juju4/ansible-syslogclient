@@ -1,16 +1,20 @@
 ---
 
+- name: Include distribution-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
 - include: debian.yml
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: ansible_os_family == 'Debian'
 
 - include: redhat.yml
-  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == "RedHat"
 
 - include: alpine.yml
   when: ansible_distribution == 'Alpine'
 
 - name: enable and start rsyslog service
   service: name=rsyslog state=started enabled=yes
+  ignore_errors: true
 
 - name: get rsyslog version
   command: "rsyslogd -v | awk -F'[ ,]' '/rsyslogd/ { print $2 }'"
