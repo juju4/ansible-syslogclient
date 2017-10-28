@@ -17,19 +17,45 @@
   changed_when: false
   register: rsyslog_v
 
+- include: timestamp.yml
+  when: syslogclient_highprecisiontimestamp
+
+- name: Configure rsyslog
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/rsyslog.d/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+    validate: 'rsyslogd -N2 -f %s'
+  notify:
+    - restart rsyslog
+  with_items: "{{ rsyslog_conf_d | default([])}}"
+
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
 - block:
     - debug: var=syslogclient_server
     - name: logging to remote syslog
-      template: src=10-remotesyslog dest=/etc/rsyslog.d/10-remotesyslog.conf owner=root group=root mode=0644
+      template:
+        src: 10-remotesyslog
+        dest: /etc/rsyslog.d/10-remotesyslog.conf
+        owner: root
+        group: root
+        mode: '0644'
+        validate: 'rsyslogd -N2 -f %s'
       notify:
         - restart rsyslog
   when: syslogclient_server is defined and syslogclient_server != ''
 
 - debug: var=ansible_virtualization_type
 - name: container config cleaning
-  replace: "dest={{ item.f }} regexp={{ item.re }} replace={{ item.rep }} backup=yes"
+  replace:
+    dest: "{{ item.f }}"
+    regexp: "{{ item.re }}"
+    replace: "{{ item.rep }}"
+    backup: yes
+    validate: 'rsyslogd -N2 -f %s'
   with_items:
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^daemon\\.\\*;mail\\.\\*;", rep: "#daemon.*;mail.*;" }
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^\tnews.err;", rep: "#\tnews.err;" }
@@ -45,7 +71,13 @@
 
 - block:
     - name: logging to remote syslog in json
-      template: src=01-json-template dest=/etc/rsyslog.d/01-json-template.conf owner=root group=root mode=0644
+      template:
+        src: 01-json-template
+        dest: /etc/rsyslog.d/01-json-template.conf
+        owner: root
+        group: root
+        mode: '0644'
+        validate: 'rsyslogd -N2 -f %s'
       notify:
         - restart rsyslog
   when: syslogclient_use_json is defined and syslogclient_use_json
@@ -53,3 +85,4 @@
 - include: remote-auditd.yml
   when: syslogclient_forward_auditd
 
+- include: logrotate.yml

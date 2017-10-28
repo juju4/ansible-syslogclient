@@ -15,6 +15,7 @@
     dest: /etc/rsyslog.d/40-audispd.conf
     mode: '0644'
     backup: yes
+    validate: 'rsyslogd -N2 -f %s'
   notify:
     - restart rsyslog
 
