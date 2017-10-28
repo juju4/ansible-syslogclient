@@ -1,0 +1,11 @@
+---
+
+- name: Enable high precision timestamp
+  replace:
+    dest: /etc/rsyslog.conf
+    regexp: '^$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
+    replace: '#$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
+    owner: root
+    group: root
+    mode: '0644'
+    validate: 'rsyslogd -N2 -f %s'
