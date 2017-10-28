@@ -1,5 +1,10 @@
 ---
 
+- name: Ensure logrotate package is present
+  package:
+    name: logrotate
+    state: present
+
 - name: Configure logrotate compress
   lineinfile:
     dest: /etc/logrotate.d/rsyslog
@@ -7,6 +12,7 @@
     line: "{{ item.l }}"
     backup: yes
     insertafter: '^\s+notifempty'
+    validate: 'logrotate -dv %s'
   with_items:
     - { re: '^\s+compress', l: '    compress' }
   when: syslogclient_logrotate_compress
@@ -18,6 +24,7 @@
     line: "{{ item.l }}"
     backup: yes
     insertafter: '^\s+notifempty'
+    validate: 'logrotate -dv %s'
   with_items:
     - { re: '^\s+dateext', l: '    dateext' }
     - { re: '^\s+dateformat', l: "    dateformat {{ syslogclient_logrotate_datformat }}" }
