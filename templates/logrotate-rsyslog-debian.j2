@@ -12,7 +12,7 @@
 {% if syslogclient_logrotate_datext %}
         dateext
         dateformat {{ syslogclient_logrotate_datformat }}
-{% endif%
+{% endif%}
         postrotate
                 invoke-rc.d rsyslog rotate > /dev/null
         endscript
@@ -43,7 +43,7 @@
 {% if syslogclient_logrotate_datext %}
         dateext
         dateformat {{ syslogclient_logrotate_datformat }}
-{% endif%
+{% endif%}
         sharedscripts
         postrotate
                 invoke-rc.d rsyslog rotate > /dev/null
