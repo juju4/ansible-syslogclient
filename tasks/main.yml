@@ -87,6 +87,6 @@
   when: syslogclient_use_json is defined and syslogclient_use_json
 
 - include: remote-auditd.yml
-  when: syslogclient_forward_auditd
+  when: syslogclient_forward_auditd and not (ansible_virtualization_type is defined and (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker"))
 
 - include: logrotate.yml
