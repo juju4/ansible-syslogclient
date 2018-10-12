@@ -9,4 +9,4 @@
     proto: "{{ item.proto }}"
     setype: syslogd_port_t
     state: present
-  with_items: "{{ syslogclient_selinux_ports }}
+  with_items: "{{ syslogclient_selinux_ports }}"
