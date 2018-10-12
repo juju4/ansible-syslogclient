@@ -16,6 +16,10 @@ syslogclient_trusted_properties: false
 #rsyslog_conf_d:
 #  - rsyslog-custom.conf
 
+# redhat selinux configuration if using non-standard ports
+syslogclient_selinux_ports: []
+#   - { port: 6514, proto: tcp }
+
 ## logrotate:
 syslogclient_logrotate_syslog_template: "logrotate-rsyslog-{{ ansible_os_family | lower }}.j2"
 syslogclient_logrotate_period: 'daily'
