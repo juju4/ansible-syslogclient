@@ -3,6 +3,14 @@
 - name: yum | Install rsyslog server
   yum: name=rsyslog state=present
 
+- name: Check FileCreateMode setting
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    regexp: '^\$FileCreateMode .*'
+    line: '$FileCreateMode 0640'
+    insertbefore: '^### RULES ###'
+    backup: yes
+
 - name: allow rsyslogd to connect non-standard ports with selinux
   seport:
     ports: "{{ item.port }}"
