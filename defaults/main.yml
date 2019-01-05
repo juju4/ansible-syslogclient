@@ -33,4 +33,3 @@ syslogclient_use_tls: false
 syslogclient_tls_ca: /rsyslog/protected/ca.pem
 syslogclient_tls_cert: /rsyslog/protected/machine-cert.pem
 syslogclient_tls_key: /rsyslog/protected/machine-key.pem
-

@@ -2,6 +2,8 @@
 
 - name: yum | Install rsyslog server
   yum: name=rsyslog state=present
+  register: pkg_result
+  until: pkg_result is success
 
 - name: Check FileCreateMode setting
   lineinfile:

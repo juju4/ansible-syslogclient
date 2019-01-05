@@ -5,9 +5,13 @@
 - name: Debian | ensure auditd is present
   package: name=auditd state=present
   when: ansible_os_family == 'Debian'
+  register: pkg_result
+  until: pkg_result is success
 - name: RedHat | ensure auditd is present
   package: name=audit state=present
   when: ansible_os_family == 'RedHat'
+  register: pkg_result
+  until: pkg_result is success
 
 - name: use dedicate log and syslog target for audisp
   template:

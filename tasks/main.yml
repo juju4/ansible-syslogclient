@@ -50,7 +50,7 @@
         validate: 'rsyslogd -N2 -f %s'
       notify:
         - restart rsyslog
-  when: syslogclient_server is defined and syslogclient_server != ''
+  when: syslogclient_server is defined and syslogclient_server
 
 - debug: var=ansible_virtualization_type
 - name: container config cleaning
@@ -64,14 +64,20 @@
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^daemon\\.\\*;mail\\.\\*;", rep: "#daemon.*;mail.*;" }
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^\tnews.err;", rep: "#\tnews.err;" }
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^\t\\*\\.=debug;\\*\\.=info;", rep: "#\t*.=debug;*.=info;" }
-    - { f: '/etc/rsyslog.d/50-default.conf', re: "^\t\\*\\.=notice;\\*\\.=warn\t\\|/dev/xconsole", rep: "#\t*.=notice;*.=warn\t|/dev/xconsole" }
+    - { f: '/etc/rsyslog.d/50-default.conf',
+        re: "^\t\\*\\.=notice;\\*\\.=warn\t\\|/dev/xconsole",
+        rep: "#\t*.=notice;*.=warn\t|/dev/xconsole"
+      }
     - { f: '/etc/rsyslog.conf', re: '^\$KLogPermitNonKernelFacility on', rep: '#$KLogPermitNonKernelFacility on' }
     - { f: '/etc/rsyslog.conf', re: '^module\(load="imklog"\)', rep: '#module(load="imklog")' }
 ## FIXME! when enabled, kills all logging ...
 #    - { f: '/etc/rsyslog.d/21-cloudinit.conf', re: '^\\& \\~', rep: 'stop' }
   notify:
     - restart rsyslog
-  when: (ansible_virtualization_type is defined and (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")) and ansible_os_family == "Debian"
+  when: >
+    (ansible_virtualization_type is defined and
+      (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
+    ) and ansible_os_family == "Debian"
 
 - block:
     - name: logging to remote syslog in json
@@ -87,6 +93,10 @@
   when: syslogclient_use_json is defined and syslogclient_use_json
 
 - include: remote-auditd.yml
-  when: syslogclient_forward_auditd and not (ansible_virtualization_type is defined and (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker"))
+  when: >
+    syslogclient_forward_auditd and
+    not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
+        )
 
 - include: logrotate.yml

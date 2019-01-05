@@ -1,3 +1,6 @@
 ---
+
 - name: apk | rsyslog install
   apk: name=rsyslog state=present
+  register: pkg_result
+  until: pkg_result is success
