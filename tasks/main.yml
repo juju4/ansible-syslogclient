@@ -34,7 +34,7 @@
     validate: 'rsyslogd -N2 -f %s'
   notify:
     - restart rsyslog
-  with_items: "{{ rsyslog_conf_d | default([])}}"
+  with_items: "{{ rsyslog_conf_d | default([]) }}"
 
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?

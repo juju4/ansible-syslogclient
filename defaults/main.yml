@@ -1,3 +1,4 @@
+---
 
 #syslogclient_server: ''
 syslogclient_server: 10.1.1.1
