@@ -1,3 +1,5 @@
+{{ ansible_managed | comment }}
+
 {% if syslogclient_trusted_properties %}
 $SystemLogSocketAnnotate on # add _UID and other usefull properties
 $SystemLogParseTrusted on # Add trusted properties

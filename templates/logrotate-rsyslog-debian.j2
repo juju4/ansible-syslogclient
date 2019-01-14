@@ -1,3 +1,5 @@
+{{ ansible_managed | comment }}
+
 /var/log/syslog
 {
         rotate {{ syslogclient_logrotate_rotate }}
