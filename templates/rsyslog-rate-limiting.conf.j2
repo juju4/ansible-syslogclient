@@ -3,10 +3,21 @@
 # https://access.redhat.com/solutions/156863
 # https://www.rivy.org/2013/03/howto-adapt-the-rate-limiting-of-rsyslog/
 # or journald: https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
+{% if not (
+    (ansible_virtualization_type is defined and
+      (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
+    ) and (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int == 16)
+   )
+%}
 $ModLoad imuxsock.so
 $SystemLogRateLimitInterval 5
 $SystemLogRateLimitBurst 2000
+{% endif %}
+{% if (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
+      (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
+%}
 
 $ModLoad imjournal
 $imjournalRateLimitInterval 5
 $imjournalRateLimitBurst 2000
+{% endif %}
