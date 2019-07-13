@@ -1,0 +1,7 @@
+# default is 200 messages in 5 sec
+# https://www.rsyslog.com/tag/rate-limiting/
+# https://access.redhat.com/solutions/156863
+# https://www.rivy.org/2013/03/howto-adapt-the-rate-limiting-of-rsyslog/
+# or journald: https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
+$SystemLogRateLimitInterval 5
+$SystemLogRateLimitBurst 2000

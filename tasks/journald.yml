@@ -1,0 +1,11 @@
+---
+
+- name: Configure journald
+  template:
+    src: "{{ journald_conf_template }}.j2"
+    dest: /etc/systemd/journald.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart systemd-journald

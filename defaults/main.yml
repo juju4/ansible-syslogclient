@@ -14,12 +14,15 @@ syslogclient_highprecisiontimestamp: true
 # http://www.rsyslog.com/what-are-trusted-properties/
 syslogclient_trusted_properties: false
 
-#rsyslog_conf_d:
+rsyslog_conf_d:
+  - rsyslog-rate-limiting.conf
 #  - rsyslog-custom.conf
 
 # redhat selinux configuration if using non-standard ports
 syslogclient_selinux_ports: []
 #   - { port: 6514, proto: tcp }
+
+journald_conf_template: journald.conf
 
 ## logrotate:
 syslogclient_logrotate_syslog_template: "logrotate-rsyslog-{{ ansible_os_family | lower }}.j2"
