@@ -1,3 +1,6 @@
+{% if (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
+      (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
+%}
 # default is 200 messages in 5 sec
 # https://www.rsyslog.com/tag/rate-limiting/
 # https://access.redhat.com/solutions/156863
@@ -7,21 +10,16 @@
     (ansible_virtualization_type is defined and
       (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
     ) and (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int == 16)
-   ) and
-   (
-     (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
-     (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
    )
 %}
 $ModLoad imuxsock.so
 $SystemLogRateLimitInterval 5
 $SystemLogRateLimitBurst 2000
 {% endif %}
-{% if (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
-      (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
-%}
 
 $ModLoad imjournal
 $imjournalRateLimitInterval 5
 $imjournalRateLimitBurst 2000
+{% else %}
+# no rate-limiting, rsyslog too old
 {% endif %}
