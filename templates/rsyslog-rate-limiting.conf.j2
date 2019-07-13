@@ -5,3 +5,7 @@
 # or journald: https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
 $SystemLogRateLimitInterval 5
 $SystemLogRateLimitBurst 2000
+
+$ModLoad imjournal
+$imjournalRateLimitInterval 5
+$imjournalRateLimitBurst 2000
