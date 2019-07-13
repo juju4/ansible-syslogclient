@@ -3,6 +3,7 @@
 # https://access.redhat.com/solutions/156863
 # https://www.rivy.org/2013/03/howto-adapt-the-rate-limiting-of-rsyslog/
 # or journald: https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
+$ModLoad imuxsock.so
 $SystemLogRateLimitInterval 5
 $SystemLogRateLimitBurst 2000
 
