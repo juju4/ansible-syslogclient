@@ -101,4 +101,8 @@
     not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
 
 - include: logrotate.yml
+
 - include: journald.yml
+  when: >
+    (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
+    (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
