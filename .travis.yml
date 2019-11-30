@@ -4,13 +4,17 @@ sudo: required
 
 env:
   - distribution: centos
-    version: 6
-    init: /sbin/init
-    run_opts: ""
+    version: 8
+    init: /usr/lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
   - distribution: centos
     version: 7
     init: /usr/lib/systemd/systemd
     run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+  - distribution: centos
+    version: 6
+    init: /sbin/init
+    run_opts: ""
   - distribution: ubuntu
     version: 18.04
     init: /lib/systemd/systemd
