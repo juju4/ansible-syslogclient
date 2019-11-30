@@ -1,0 +1,4 @@
+---
+
+_logrotate_syslog_cfg: /etc/logrotate.d/syslog
+syslog_user: root
