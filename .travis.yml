@@ -69,6 +69,10 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 1)
 
+after_script:
+  - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/rsyslog.conf'
+  - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/rsyslog.d -type f -exec cat {} \;'
+  - 'sudo docker exec --tty "$(cat ${container_id})" ls -laR /var/log/'
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'
 
