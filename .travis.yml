@@ -73,7 +73,13 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 1)
 
+after_failure:
+  - 'sudo docker exec --tty "$(cat ${container_id})" ps auxw'
+  - '[ "X${distribution}" == "Xalpine" ] && sudo docker exec --tty "$(cat ${container_id})"  rc-status"'
+  - 'sudo docker exec --tty "$(cat ${container_id})" ansible -i inventory --connection=local -m setup localhost'
+
 after_script:
+  - 'sudo docker exec --tty "$(cat ${container_id})" rsyslogd -v'
   - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/rsyslog.conf'
   - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/rsyslog.d -type f -exec cat {} \;'
   - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/logrotate.conf'
