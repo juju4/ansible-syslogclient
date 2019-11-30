@@ -33,7 +33,7 @@ env:
 #    init: /sbin/init
 #    run_opts: ""
   - distribution: alpine
-    version: 3.10
+    version: "3.10"
     init: /sbin/init
     run_opts: ""
 
