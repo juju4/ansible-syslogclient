@@ -1,8 +1,8 @@
 {{ ansible_managed | comment }}
 ## /etc/logrotate.d/osquery
 /var/log/osquery/osqueryd.results.log {
-    rotate {{ harden_logrotate_days|int }}
-    daily
+    rotate {{ syslogclient_logrotate_rotate|int }}
+    {{ syslogclient_logrotate_period }}
 {% if syslogclient_logrotate_datext %}
     dateext
     dateformat {{ syslogclient_logrotate_datformat }}
