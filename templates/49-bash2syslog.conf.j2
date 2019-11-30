@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+local1.notice                    {{ syslogclient_bash_syslog_target | default('/var/log/bash.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
