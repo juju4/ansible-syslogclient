@@ -32,10 +32,10 @@ env:
 #    version: 12.04
 #    init: /sbin/init
 #    run_opts: ""
-#  - distribution: alpine
-#    version: 3.4
-#    init: /sbin/init
-#    run_opts: ""
+  - distribution: alpine
+    version: 3.10
+    init: /sbin/init
+    run_opts: ""
 
 services:
   - docker
