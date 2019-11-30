@@ -1,0 +1,25 @@
+{{ ansible_managed | comment }}
+:msg, contains, "iptables: " -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
+:msg, contains, "iptables denied: " -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
+:msg, contains, "ip6tables: " -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
+:msg, contains, "ip6tables denied: " -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
