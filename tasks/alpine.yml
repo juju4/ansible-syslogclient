@@ -1,6 +1,10 @@
 ---
 
 - name: apk | rsyslog install
-  apk: name=rsyslog state=present
+  apk:
+    name:
+      - rsyslog
+      - openrc
+    state: present
   register: pkg_result
   until: pkg_result is success
