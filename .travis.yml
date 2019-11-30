@@ -76,6 +76,8 @@ script:
 after_script:
   - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/rsyslog.conf'
   - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/rsyslog.d -type f -exec cat {} \;'
+  - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/logrotate.conf'
+  - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/logrotate.d -type f -exec cat {} \;'
   - 'sudo docker exec --tty "$(cat ${container_id})" ls -laR /var/log/'
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'

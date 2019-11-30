@@ -7,6 +7,12 @@
   register: pkg_result
   until: pkg_result is success
 
+- name: Ensure logrotate.d directory exists
+  file:
+    dest: /etc/logrotate.d
+    state: directory
+    mode: '0755'
+
 - name: Configure logrotate
   template:
     src: "{{ syslogclient_logrotate_syslog_template }}"
