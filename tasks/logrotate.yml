@@ -14,3 +14,12 @@
     mode: '0644'
     backup: yes
     validate: 'logrotate -dv %s'
+
+- name: Configure logrotate extras
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/logrotate.d/{{ item | basename }}"
+    mode: '0644'
+    backup: yes
+    validate: 'logrotate -dv %s'
+  with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"

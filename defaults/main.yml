@@ -18,6 +18,10 @@ rsyslog_conf_d:
   - rsyslog-rate-limiting.conf
 #  - rsyslog-custom.conf
 
+rsyslog_conf_d_extradirs:
+  - /var/log/ansible
+  - /var/log/snmpd
+
 # redhat selinux configuration if using non-standard ports
 syslogclient_selinux_ports: []
 #   - { port: 6514, proto: tcp }
@@ -31,6 +35,7 @@ syslogclient_logrotate_rotate: 90
 syslogclient_logrotate_compress: true
 syslogclient_logrotate_datext: true
 syslogclient_logrotate_datformat: '-%Y-%m-%d.log'
+syslogclient_logrotate_syslog_template_extras: []
 
 ## only valid with tcp (Work in progress option)
 syslogclient_use_tls: false
