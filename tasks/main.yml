@@ -32,10 +32,10 @@
 
 - name: ensure extra log directory exists
   file:
-    dest: "{{ item }}"
+    dest: "{{ item.d }}"
     state: directory
     mode: '0755'
-    owner: "{{ syslog_user }}"
+    owner: "{{ item.o | default(syslog_user) }}"
     group: root
   with_items: "{{ rsyslog_conf_d_extradirs }}"
 

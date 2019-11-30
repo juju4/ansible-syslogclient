@@ -19,8 +19,9 @@ rsyslog_conf_d:
 #  - rsyslog-custom.conf
 
 rsyslog_conf_d_extradirs:
-  - /var/log/ansible
-  - /var/log/snmpd
+  - { d: /var/log/ansible }
+  - { d: /var/log/snmpd }
+#  - { d: /var/log/app, o: _appuser }
 
 # redhat selinux configuration if using non-standard ports
 syslogclient_selinux_ports: []
