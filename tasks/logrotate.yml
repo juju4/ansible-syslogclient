@@ -26,7 +26,7 @@
     - name: Configure logrotate extras
       template:
         src: "{{ item }}.j2"
-        dest: "/etc/logrotate.d/{{ item | basename }}"
+        dest: "/etc/logrotate.d/{{ item | basename | regex_replace('^logrotate-', '') }}"
         mode: '0644'
         backup: yes
         validate: 'logrotate -dv %s'
