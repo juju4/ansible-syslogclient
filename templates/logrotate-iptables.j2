@@ -13,7 +13,7 @@
         compress
         delaycompress
 {% endif %}
-    create 640 root adm
+    create 640 {{ syslog_user }} adm
     postrotate
         invoke-rc.d rsyslog rotate > /dev/null
     endscript
@@ -31,7 +31,7 @@
         compress
         delaycompress
 {% endif %}
-    create 640 root adm
+    create 640 {{ syslog_user }} adm
     postrotate
         invoke-rc.d rsyslog rotate > /dev/null
     endscript

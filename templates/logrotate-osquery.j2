@@ -13,6 +13,6 @@
     compress
     delaycompress
 {% endif %}
-    create 640 root adm
+    create 640 {{ syslog_user }} adm
     sharedscripts
 }
