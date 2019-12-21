@@ -4,7 +4,7 @@ if $programname == 'audispd' then            /var/log/audispd.log
 {% if syslogclient_audispd_syslog_target is defined and audispd_syslog_target != '' %}
 if $programname == 'audispd' then            {{ syslogclient_audispd_syslog_target }}
 {% endif %}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
 & stop

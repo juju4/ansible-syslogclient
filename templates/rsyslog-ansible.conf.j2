@@ -1,30 +1,6 @@
 {{ ansible_managed | comment }}
-if ($programname == 'python' or $programname == 'python3') and $msg contains 'ansible-' and $msg contains 'Invoked with ' then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/ansible.log') }}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
-& ~
-{% else %}
-& stop
-{% endif %}
-:msg, contains, "ansible-copy: " -{{ syslogclient_ansible_syslog_target | default('/var/log/ansible/ansible.log') }}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
-& ~
-{% else %}
-& stop
-{% endif %}
-:msg, contains, "ansible-command: " -{{ syslogclient_ansible_syslog_target | default('/var/log/ansible/ansible.log') }}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
-& ~
-{% else %}
-& stop
-{% endif %}
-:msg, contains, "ansible-apt: " -{{ syslogclient_ansible_syslog_target | default('/var/log/ansible/ansible.log') }}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
-& ~
-{% else %}
-& stop
-{% endif %}
-:msg, contains, "ansible-async_wrapper.py: " -{{ syslogclient_ansible_syslog_target | default('/var/log/ansible/ansible.log') }}
-{% if rsyslog_v.stdout is defined and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+if ($programname == 'python' or $programname == 'python3') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
 & stop
