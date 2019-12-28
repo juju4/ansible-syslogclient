@@ -35,7 +35,7 @@ syslogclient_logrotate_period: 'daily'
 syslogclient_logrotate_rotate: 90
 syslogclient_logrotate_compress: true
 syslogclient_logrotate_datext: true
-syslogclient_logrotate_datformat: '-%Y-%m-%d.log'
+syslogclient_logrotate_datformat: '-%Y%m%d'
 syslogclient_logrotate_syslog_template_extras: []
 
 ## only valid with tcp (Work in progress option)
