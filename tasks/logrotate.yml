@@ -13,6 +13,20 @@
     state: directory
     mode: '0755'
 
+- name: Configure default logrotate
+  blockinfile:
+    dest: /etc/logrotate.conf
+    insertafter: '^#compress'
+    block: |
+      {% if syslogclient_logrotate_compress %}
+      compress
+      delaycompress
+      {% endif %}
+      {% if syslogclient_logrotate_datext %}
+      dateext
+      dateformat {{ syslogclient_logrotate_datformat }}
+      {% endif%}
+
 # validation failed on Alpine if files don't exist
 - block:
     - name: Configure logrotate
