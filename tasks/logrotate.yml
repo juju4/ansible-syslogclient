@@ -13,6 +13,16 @@
     state: directory
     mode: '0755'
 
+- name: review logrotate configuration
+  replace:
+    dest: /etc/logrotate.conf
+    regexp: "{{ item.re }}"
+    replace: "{{ item.rep }}"
+    backup: "{{ syslogclient_backup | default(false) }}"
+  with_items:
+    - { re: '^(weekly|daily|monthly)', rep: "{{ syslogclient_logrotate_period }}" }
+    - { re: '^rotate .*', rep: "rotate {{ syslogclient_logrotate_rotate|int }}" }
+
 - name: Configure default logrotate
   blockinfile:
     dest: /etc/logrotate.conf
@@ -34,7 +44,7 @@
         src: "{{ syslogclient_logrotate_syslog_template }}"
         dest: "{{ _logrotate_syslog_cfg }}"
         mode: '0644'
-        backup: yes
+        backup: "{{ syslogclient_backup | default(false) }}"
         validate: 'logrotate -dv %s'
 
     - name: Configure logrotate extras
@@ -42,7 +52,7 @@
         src: "{{ item }}.j2"
         dest: "/etc/logrotate.d/{{ item | basename | regex_replace('^logrotate-', '') }}"
         mode: '0644'
-        backup: yes
+        backup: "{{ syslogclient_backup | default(false) }}"
         validate: 'logrotate -dv %s'
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
   when: ansible_distribution != 'Alpine'
@@ -52,13 +62,13 @@
         src: "{{ syslogclient_logrotate_syslog_template }}"
         dest: "{{ _logrotate_syslog_cfg }}"
         mode: '0644'
-        backup: yes
+        backup: "{{ syslogclient_backup | default(false) }}"
 
     - name: Alpine | Configure logrotate extras
       template:
         src: "{{ item }}.j2"
         dest: "/etc/logrotate.d/{{ item | basename }}"
         mode: '0644'
-        backup: yes
+        backup: "{{ syslogclient_backup | default(false) }}"
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
   when: ansible_distribution == 'Alpine'

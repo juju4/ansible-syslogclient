@@ -74,7 +74,7 @@
     dest: "{{ item.f }}"
     regexp: "{{ item.re }}"
     replace: "{{ item.rep }}"
-    backup: yes
+    backup: "{{ syslogclient_backup | default(false) }}"
     validate: 'rsyslogd -N2 -f %s'
   with_items:
     - { f: '/etc/rsyslog.d/50-default.conf', re: "^daemon\\.\\*;mail\\.\\*;", rep: "#daemon.*;mail.*;" }

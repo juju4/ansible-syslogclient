@@ -18,7 +18,7 @@
     src: rsyslog-audispd.conf.j2
     dest: /etc/rsyslog.d/40-audispd.conf
     mode: '0644'
-    backup: yes
+    backup: "{{ syslogclient_backup | default(false) }}"
     validate: 'rsyslogd -N2 -f %s'
   notify:
     - restart rsyslog
@@ -28,7 +28,7 @@
     dest: /etc/audisp/plugins.d/syslog.conf
     regexp: '^active = .*'
     replace: 'active = yes'
-    backup: yes
+    backup: "{{ syslogclient_backup | default(false) }}"
   notify:
     - restart auditd
     - restart auditd - rhel7

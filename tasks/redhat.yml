@@ -11,7 +11,7 @@
     regexp: '^\$FileCreateMode .*'
     line: '$FileCreateMode 0640'
     insertbefore: '^### RULES ###'
-    backup: yes
+    backup: "{{ syslogclient_backup | default(false) }}"
 
 - name: allow rsyslogd to connect non-standard ports with selinux
   seport:
