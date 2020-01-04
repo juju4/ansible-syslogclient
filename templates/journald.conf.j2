@@ -12,6 +12,10 @@
 #
 # See journald.conf(5) for details.
 
+#journalctl --disk-usage
+#journalctl --verify
+#journalctl --vacuum-size=800M
+
 [Journal]
 #Storage=auto
 #Compress=yes
@@ -24,7 +28,7 @@
 # https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
 RateLimitInterval=5s
 RateLimitBurst=2000
-#SystemMaxUse=
+SystemMaxUse={{ syslogclient_journald_systemmaxuse | default('1024M') }}
 #SystemKeepFree=
 #SystemMaxFileSize=
 #SystemMaxFiles=100
@@ -34,7 +38,7 @@ RateLimitBurst=2000
 #RuntimeMaxFiles=100
 #MaxRetentionSec=
 #MaxFileSec=1month
-#ForwardToSyslog=yes
+ForwardToSyslog={{ syslogclient_journald_forwardtosyslog | default('no') }}
 #ForwardToKMsg=no
 #ForwardToConsole=no
 #ForwardToWall=yes
