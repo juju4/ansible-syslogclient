@@ -5,3 +5,9 @@ if ($programname == 'python' or $programname == 'python3') then {{ syslogclient_
 {% else %}
 & stop
 {% endif %}
+if ($programname contains 'ansible-') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
