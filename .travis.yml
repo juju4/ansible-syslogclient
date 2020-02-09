@@ -106,6 +106,11 @@ after_script:
   - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/rsyslog.d -type f -exec cat {} \;'
   - 'sudo docker exec --tty "$(cat ${container_id})" cat /etc/logrotate.conf'
   - 'sudo docker exec --tty "$(cat ${container_id})" find /etc/logrotate.d -type f -exec cat {} \;'
+  - 'sudo docker exec --tty "$(cat ${container_id})" gpg2 --list-keys'
+  - 'sudo docker exec --tty "$(cat ${container_id})" cat /root/root-fingerprint'
+  - 'sudo docker exec --tty "$(cat ${container_id})" cat /root/root.pub'
+  - 'sudo docker exec --tty "$(cat ${container_id})" ls -laR /var/log/'
+  - 'sudo docker exec --tty "$(cat ${container_id})" logrotate -vf /etc/logrotate.conf'
   - 'sudo docker exec --tty "$(cat ${container_id})" ls -laR /var/log/'
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'

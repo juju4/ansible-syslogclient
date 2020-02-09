@@ -28,15 +28,18 @@
       package:
         name: gnupg2
         state: present
+    - debug: var=syslogclient_logrotate_encrypt_keyfile
     - name: Recover keyid from file
       slurp:
         src: "{{ syslogclient_logrotate_encrypt_keyfile }}"
       register: keyfile
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
+    - debug: var=keyfile
     - name: Set fact for keyid
       set_fact:
         syslogclient_logrotate_encrypt_keyid: "{{ keyfile['content'] | b64decode }}"
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
+    - debug: var=syslogclient_logrotate_encrypt_keyid
   when: syslogclient_logrotate_encrypt|bool
 
 - name: Configure default logrotate
@@ -46,7 +49,9 @@
     block: |
       {% if syslogclient_logrotate_compress %}
       compress
+      {% if syslogclient_logrotate_delaycompress %}
       delaycompress
+      {% endif %}
       {% endif %}
       {% if syslogclient_logrotate_datext %}
       dateext
@@ -57,7 +62,7 @@
       {% endif%}
       {% if syslogclient_logrotate_encrypt and syslogclient_logrotate_encrypt_keyid|string %}
       compresscmd /usr/bin/gpg2
-      compressoptions --encrypt --default-key {{ syslogclient_logrotate_encrypt_keyid }}
+      compressoptions --encrypt --always-trust -r {{ syslogclient_logrotate_encrypt_keyid }}
       compressext .gpg
       {% endif%}
 

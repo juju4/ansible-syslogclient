@@ -4,7 +4,12 @@
   vars:
     syslogclient_logrotate_encrypt: true
     syslogclient_logrotate_encrypt_keyid: ''
-    syslogclient_logrotate_encrypt_keyfile: "/home/myuser/{{ gpg_user }}-fingerprint"
+    syslogclient_logrotate_encrypt_keyfile: "/root/{{ gpg_user }}-fingerprint"
+    syslogclient_logrotate_delaycompress: false
+    gpg_generator_user: root
+    gpg_home: /root
+    gpg_user: "{{ ansible_user }}"
+    gpg_pull: false
   pre_tasks:
     - set_fact:
         rsyslog_conf_d: []
