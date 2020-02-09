@@ -1,0 +1,17 @@
+---
+
+- hosts: all
+  vars:
+    syslogclient_logrotate_encrypt: true
+    syslogclient_logrotate_encrypt_keyid: ''
+    syslogclient_logrotate_encrypt_keyfile: "/home/myuser/{{ gpg_user }}-fingerprint"
+  pre_tasks:
+    - set_fact:
+        rsyslog_conf_d: []
+      when: not (
+        (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
+        )
+  roles:
+    - juju4.gpgkey_generate
+    - juju4.syslogclient
