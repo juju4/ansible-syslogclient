@@ -37,6 +37,11 @@ syslogclient_logrotate_compress: true
 syslogclient_logrotate_datext: true
 syslogclient_logrotate_datformat: '-%Y%m%d'
 syslogclient_logrotate_syslog_template_extras: []
+syslogclient_logrotate_shred: true
+## encrypt with gpg?
+syslogclient_logrotate_encrypt: false
+syslogclient_logrotate_encrypt_keyid: ''
+syslogclient_logrotate_encrypt_keyfile: ''
 
 ## only valid with tcp (Work in progress option)
 syslogclient_use_tls: false
