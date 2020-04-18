@@ -8,5 +8,5 @@ RUN apt-get install -y python sudo python3-pip python3-dev libffi-dev ansible
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
 # Install Ansible inventory file
-RUN mkdir /etc/ansible
+#RUN mkdir /etc/ansible
 RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
