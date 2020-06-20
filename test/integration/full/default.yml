@@ -7,6 +7,8 @@
         - 30-ansible.conf
         - 30-iptables.conf
         - 30-snmpd.conf
+        - 30-dnscryptproxy.conf
+        - 30-osqueryd.conf
     - rsyslog_conf_d_extradirs:
         - { d: /var/log/ansible }
         - { d: /var/log/iptables }

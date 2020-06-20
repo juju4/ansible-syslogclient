@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+if ($programname == 'dnscrypt-proxy') then {{ syslogclient_dnscryptproxy_syslog_target | default('/var/log/dnscryptproxy.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}

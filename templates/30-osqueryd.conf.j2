@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+if ($programname == 'osqueryd') then {{ syslogclient_osqueryd_syslog_target | default('/var/log/osqueryd.log') }}
+{% if rsyslog_v.stdout is defined and rsyslog_v.stdout and rsyslog_v.stdout|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
