@@ -4,17 +4,17 @@ sudo: required
 
 jobs:
   include:
-    - env: distribution=centos version=8 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default
-    - env: distribution=centos version=7 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default
+    - env: distribution=centos version=8 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default
+    - env: distribution=centos version=7 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default
     - env: distribution=centos version=6 init=/sbin/init run_opts="" suite=default
-    - env: distribution=ubuntu version=20.04 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default
-    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default
-    - env: distribution=ubuntu version=16.04 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default
+    - env: distribution=ubuntu version=20.04 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default
+    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default
+    - env: distribution=ubuntu version=16.04 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default
     - env: distribution=alpine version="3.10" init=/sbin/init run_opts="" suite=default
       if: branch =~ /^devel*/
-    - env: distribution=centos version=8 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=full
-    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=full
-    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'" suite=default-gpg
+    - env: distribution=centos version=8 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=full
+    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=full
+    - env: distribution=ubuntu version=18.04 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" suite=default-gpg
 
 services:
   - docker
