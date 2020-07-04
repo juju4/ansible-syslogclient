@@ -3,66 +3,23 @@
 sudo: required
 
 env:
-  - distribution: centos
-    version: 8
-    init: /usr/lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default
-  - distribution: centos
-    version: 7
-    init: /usr/lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default
-  - distribution: centos
-    version: 6
-    init: /sbin/init
-    run_opts: ""
-    suite: default
-  - distribution: ubuntu
-    version: 20.04
-    init: /lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default
-  - distribution: ubuntu
-    version: 18.04
-    init: /lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default
-  - distribution: ubuntu
-    version: 16.04
-    init: /lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default
-  - distribution: ubuntu
-    version: 14.04
-    init: /sbin/init
-    run_opts: ""
-    suite: default
-## ansible2.4 requires python-cryptography, not available
-#  - distribution: ubuntu
-#    version: 12.04
-#    init: /sbin/init
-#    run_opts: ""
-  - distribution: alpine
-    version: "3.10"
-    init: /sbin/init
-    run_opts: ""
-    suite: default
-  - distribution: centos
-    version: 8
-    init: /usr/lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: full
-  - distribution: ubuntu
-    version: 18.04
-    init: /lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: full
-  - distribution: ubuntu
-    version: 18.04
-    init: /lib/systemd/systemd
-    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
-    suite: default-gpg
+  init: /usr/lib/systemd/systemd
+  run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+  suite: default
+
+jobs:
+  include:
+    - env: distribution=centos version=8
+    - env: distribution=centos version=7
+    - env: distribution=centos version=6 init=/sbin/init run_opts=""
+    - env: distribution=ubuntu version=20.04
+    - env: distribution=ubuntu version=18.04
+    - env: distribution=ubuntu version=16.04
+    - env: distribution=alpine version="3.10" init=/sbin/init run_opts=""
+      if: branch =~ /^devel*/
+    - env: distribution=centos version=8 suite=full
+    - env: distribution=ubuntu version=18.04 suite=full
+    - env: distribution=ubuntu version=18.04 suite=default-gpg
 
 services:
   - docker
