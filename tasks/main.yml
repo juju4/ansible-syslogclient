@@ -19,10 +19,22 @@
 - name: Gather package facts
   package_facts:
     manager: auto
+  when: ansible_distribution != 'Alpine'
 
 - name: get rsyslog version
   set_fact:
     rsyslog_v: "{{ ansible_facts.packages['rsyslog'][0]['version'] }}"
+  when: ansible_distribution != 'Alpine'
+
+- name: Alpine | get rsyslog version
+  shell: "rsyslogd -v | awk 'match($0, /rsyslogd\\s+([0-9.]+)/, a) { print a[1] }'"
+  changed_when: false
+  register: rsyslog_v2
+
+- name: Alpine | set rsyslog version
+  set_fact:
+    rsyslog_v: "{{ rsyslog_v2.stdout }}"
+  when: ansible_distribution == 'Alpine'
 
 - debug: var=rsyslog_v verbosity=1
 
