@@ -17,7 +17,7 @@ RUN dnf -y install epel-release git sudo python3-pip cargo && \
     dnf -y groupinstall 'Development Tools' && \
     dnf clean all
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
-RUN pip3 install setuptools_rust && \
+RUN pip3 install setuptools_rust wheel && \
     pip3 install ansible
 
 # Disable requiretty
