@@ -13,12 +13,11 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
-RUN dnf -y install epel-release
-RUN dnf -y install git sudo python3-pip
+RUN dnf -y install epel-release git sudo python3-pip cargo && \
+    dnf -y groupinstall 'Development Tools' && \
+    dnf clean all
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 RUN pip3 install ansible
-RUN dnf -y groupinstall 'Development Tools'
-RUN dnf clean all
 
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
