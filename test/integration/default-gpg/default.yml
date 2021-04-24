@@ -8,6 +8,7 @@
     syslogclient_logrotate_delaycompress: false
     gpg_generator_user: root
     gpg_home: /root
+    ansible_user: root
     gpg_user: "{{ ansible_user }}"
     gpg_pull: false
   pre_tasks:
