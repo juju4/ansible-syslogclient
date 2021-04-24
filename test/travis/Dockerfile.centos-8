@@ -13,7 +13,7 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
-RUN dnf -y install epel-release git sudo python3-pip cargo && \
+RUN dnf -y install epel-release git sudo python3-pip platform-python-devel cargo && \
     dnf -y groupinstall 'Development Tools' && \
     dnf clean all
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
