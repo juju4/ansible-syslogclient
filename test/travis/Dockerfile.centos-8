@@ -17,7 +17,7 @@ RUN dnf -y install epel-release git sudo python3-pip cargo && \
     dnf -y groupinstall 'Development Tools' && \
     dnf clean all
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
-RUN pip3 install ansible
+RUN pip3 install setuptools_rust ansible
 
 # Disable requiretty
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
