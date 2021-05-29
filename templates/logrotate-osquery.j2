@@ -1,30 +1,14 @@
 {{ ansible_managed | comment }}
 ## /etc/logrotate.d/osquery
-/var/log/osquery/osqueryd.results.log {
-    rotate {{ syslogclient_logrotate_rotate|int }}
-    {{ syslogclient_logrotate_period }}
-{% if syslogclient_logrotate_datext %}
-    dateext
-    dateformat {{ syslogclient_logrotate_datformat }}
-{% endif%}
-    missingok
-    notifempty
-{% if syslogclient_logrotate_compress %}
-    compress
-    delaycompress
-{% endif %}
-    create 640 {{ syslog_user | default('root') }} adm
-    sharedscripts
-}
+/var/log/osquery/osqueryd.results.log
 /var/log/osquery/osqueryd.snapshots.log {
     rotate {{ syslogclient_logrotate_rotate|int }}
     {{ syslogclient_logrotate_period }}
-{% if syslogclient_logrotate_datext is defined and syslogclient_logrotate_datext %}
+{% if syslogclient_logrotate_datext is defined and syslogclient_logrotate_datext|string %}
     dateext
     dateformat {{ syslogclient_logrotate_datformat }}
 {% endif%}
     missingok
-    notifempty
 {% if syslogclient_logrotate_compress %}
     compress
     delaycompress
@@ -32,7 +16,13 @@
     create 640 {{ syslog_user | default('root') }} adm
     sharedscripts
 }
+
 {% if osquery_syslog_target is defined and osquery_syslog_target != '' and '/var/log/' in osquery_syslog_target %}
+{{ osquery_syslog_target }}{% if not (osquery_syslog_target2 is defined and osquery_syslog_target2 != '' and '/var/log/' in osquery_syslog_target2) %} {{% endif %}
+{% endif %}
+{% if osquery_syslog_target2 is defined and osquery_syslog_target2 != '' and '/var/log/' in osquery_syslog_target2 %}
+{{ osquery_syslog_target2 }} {
+{% endif %}
 {{ osquery_syslog_target }} {
     rotate {{ syslogclient_logrotate_rotate|int }}
     {{ syslogclient_logrotate_period }}
@@ -41,7 +31,6 @@
     dateformat {{ syslogclient_logrotate_datformat }}
 {% endif%}
     missingok
-    notifempty
 {% if syslogclient_logrotate_compress %}
     compress
     delaycompress
@@ -50,24 +39,5 @@
     sharedscripts
     # Ubuntu: parent directory has insecure permissions (It's world writable or writable by group which is not "root")
     su root {{ osquery_syslog_dir_group | default(varlog_group) }}
-}
-{% endif %}
-{% if osquery_syslog_target2 is defined and osquery_syslog_target2 != '' and '/var/log/' in osquery_syslog_target2 %}
-{{ osquery_syslog_target2 }} {
-    rotate {{ syslogclient_logrotate_rotate|int }}
-    {{ syslogclient_logrotate_period }}
-{% if syslogclient_logrotate_datext is defined and syslogclient_logrotate_datext %}
-    dateext
-    dateformat {{ syslogclient_logrotate_datformat }}
-{% endif%}
-    missingok
-    notifempty
-{% if syslogclient_logrotate_compress %}
-    compress
-    delaycompress
-{% endif %}
-    create 640 {{ syslog_user | default('root') }} adm
-    sharedscripts
-    su root {{ osquery_syslog_dir_group2 | default(varlog_group) }}
 }
 {% endif %}
