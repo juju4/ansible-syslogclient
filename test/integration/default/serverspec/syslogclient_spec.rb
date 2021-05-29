@@ -42,4 +42,3 @@ end
 #logger TroubleshootingTest
 #echo test | logger -t mytest -d -n 10.1.1.1
 #echo test | logger -t mytest -T -n 10.1.1.1 -P 514 ## Port required
-

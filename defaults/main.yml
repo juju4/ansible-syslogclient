@@ -1,11 +1,11 @@
 ---
 
-#syslogclient_server: ''
+# syslogclient_server: ''
 syslogclient_server: 10.1.1.1
-#syslogclient_server: 10.1.1.1:514
+# syslogclient_server: 10.1.1.1:514
 syslogclient_use_tcp: false
 syslogclient_forward_auditd: true
-#syslogclient_audispd_syslog_target: '@@192.168.100.100'
+# syslogclient_audispd_syslog_target: '@@192.168.100.100'
 ## forwarding to logstash?
 syslogclient_use_json: false
 
@@ -16,12 +16,12 @@ syslogclient_trusted_properties: false
 
 rsyslog_conf_d:
   - rsyslog-rate-limiting.conf
-#  - rsyslog-custom.conf
+  # - rsyslog-custom.conf
 
 rsyslog_conf_d_extradirs:
   - { d: /var/log/ansible }
   - { d: /var/log/snmpd }
-#  - { d: /var/log/app, o: _appuser }
+  # - { d: /var/log/app, o: _appuser }
 
 # redhat selinux configuration if using non-standard ports
 syslogclient_selinux_ports: []

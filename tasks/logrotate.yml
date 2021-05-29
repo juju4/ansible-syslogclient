@@ -28,18 +28,21 @@
       package:
         name: gnupg2
         state: present
-    - debug: var=syslogclient_logrotate_encrypt_keyfile
+    - name: Debug | syslogclient_logrotate_encrypt_keyfile
+      debug: var=syslogclient_logrotate_encrypt_keyfile
     - name: Recover keyid from file
       slurp:
         src: "{{ syslogclient_logrotate_encrypt_keyfile }}"
       register: keyfile
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
-    - debug: var=keyfile
+    - name: Debug | keyfile
+      debug: var=keyfile
     - name: Set fact for keyid
       set_fact:
         syslogclient_logrotate_encrypt_keyid: "{{ keyfile['content'] | b64decode }}"
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
-    - debug: var=syslogclient_logrotate_encrypt_keyid
+    - name: Debug | syslogclient_logrotate_encrypt_keyid
+      debug: var=syslogclient_logrotate_encrypt_keyid
   when: syslogclient_logrotate_encrypt|bool
 
 - name: Configure default logrotate

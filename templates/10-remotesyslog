@@ -29,4 +29,3 @@ $ActionSendStreamDriverMode 1 # run driver in TLS-only mode
 {% else %}
 *.*     @{{ syslogclient_server }}
 {% endif %}
-

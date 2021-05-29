@@ -20,7 +20,7 @@
     not (ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7')
 
 - name: restart auditd - rhel7
-  command: "service auditd restart"
+  command: "service auditd restart"  # noqa command-instead-of-module
   environment:
     PATH: '/usr/sbin:/usr/bin:/sbin:/bin'
   when: >
