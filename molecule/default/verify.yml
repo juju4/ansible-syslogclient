@@ -6,6 +6,12 @@
     files_test:
       - /etc/rsyslog.d/50-default.conf
       - /etc/rsyslog.d/10-remotesyslog.conf
+  pre_tasks:
+    - name: Debian | set fact
+      set_fact:
+        files_test:
+          - /etc/rsyslog.d/10-remotesyslog.conf
+      when: ansible_distribution == 'Alpine'
   tasks:
     - name: Ensure rsyslog config is present
       stat:
