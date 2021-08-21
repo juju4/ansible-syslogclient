@@ -4,12 +4,15 @@
   service: name=rsyslog state=restarted
   when: >
     not (ansible_virtualization_type is defined and
-          ansible_virtualization_type == "docker" and
-          ansible_distribution == 'Alpine'
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
         )
 
 - name: restart systemd-journald
   service: name=systemd-journald state=restarted
+  when: >
+    not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
 
 - name: restart auditd
   service:
@@ -17,7 +20,8 @@
       state: restarted
   when: >
     not (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
+          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker" or
+          ansible_virtualization_type == "containerd")
         ) and
     not (
         (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
@@ -32,6 +36,7 @@
       warn: False
   when: >
     not (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
+          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker" or
+          ansible_virtualization_type == "containerd")
         ) and
     (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7)
