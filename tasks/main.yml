@@ -14,6 +14,11 @@
 
 - name: enable and start rsyslog service
   service: name=rsyslog state=started enabled=yes
+  when: >
+    ansible_os_family != "RedHat" and
+    not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
 
 - name: Gather package facts
   package_facts:
