@@ -12,19 +12,26 @@
   service: name=systemd-journald state=restarted
 
 - name: restart auditd
-  service: name=auditd state=restarted
+  service:
+      name: auditd
+      state: restarted
   when: >
     not (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
         ) and
-    not (ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7')
+    not (
+        (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
+        (ansible_os_family == "Suse" )
+    )
 
-- name: restart auditd - rhel7
+- name: restart auditd - rhel7+
   command: "service auditd restart"  # noqa command-instead-of-module
   environment:
-    PATH: '/usr/sbin:/usr/bin:/sbin:/bin'
+      PATH: '/usr/sbin:/usr/bin:/sbin:/bin'
+  args:
+      warn: False
   when: >
     not (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
         ) and
-    (ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7')
+    (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7)
