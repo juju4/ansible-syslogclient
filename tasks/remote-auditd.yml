@@ -32,7 +32,7 @@
     owner: "{{ syslog_user }}"
     group: "{{ syslog_group | default('root') }}"
   when: >
-    "'/var/log/' in audisp_syslog_target" and
+    "audisp_syslog_target is defined and '/var/log/' in audisp_syslog_target" and
     audisp_syslog_target|dirname != '/var/log'
 
 - name: setup rsyslog to send audisp logs to a specific target
