@@ -11,7 +11,7 @@
       set_fact:
         files_test:
           - /etc/rsyslog.d/10-remotesyslog.conf
-      when: ansible_distribution == 'Alpine'
+      when: ansible_distribution == 'Debian'
   tasks:
     - name: Ensure rsyslog config is present
       stat:
