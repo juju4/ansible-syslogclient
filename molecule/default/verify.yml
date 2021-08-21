@@ -9,7 +9,7 @@
   tasks:
     - name: Ensure rsyslog config is present
       stat:
-        path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+        path: "{{ item }}"
       register: cfg
       with_items: "{{ files_test }}"
     - name: Validate config present
