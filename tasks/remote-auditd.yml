@@ -55,4 +55,4 @@
     backup: "{{ auditd_backup | default(false) }}"
   notify:
     - restart auditd
-    - restart auditd - rhel7
+    - restart auditd - rhel7+
