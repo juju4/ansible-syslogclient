@@ -1,0 +1,28 @@
+---
+
+- name: Verify
+  hosts: syslogclient
+  vars:
+    files_test:
+      - /etc/rsyslog.d/50-default.conf
+      - /etc/rsyslog.d/10-remotesyslog.conf
+  tasks:
+    - name: Ensure rsyslog config is present
+      stat:
+        path: /usr/share/bbb-web/WEB-INF/classes/bigbluebutton.properties
+      register: cfg
+      with_items: "{{ files_test }}"
+    - name: Validate config present
+      assert:
+        that: item.stat.exists and item.stat.size != 0
+      with_items: "{{ cfg.results }}"
+
+    - name: Ensure syslog process is running
+      command: pgrep rsyslogd
+      register: ps
+      changed_when: false
+      failed_when: false
+    - name: Validate ps output
+      assert:
+        that: ps.stdout
+      failed_when: false
