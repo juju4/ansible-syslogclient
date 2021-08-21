@@ -31,4 +31,7 @@
     - name: Validate ps output
       assert:
         that: ps.stdout
-      failed_when: false
+      failed_when: >
+        (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
