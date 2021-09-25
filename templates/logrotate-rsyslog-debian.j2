@@ -6,7 +6,7 @@
         {{ syslogclient_logrotate_period }}
         missingok
         notifempty
-	su {{ syslog_user }} adm
+	su root {{ syslog_user }}
 {% if syslogclient_logrotate_compress %}
         compress
         delaycompress
@@ -37,7 +37,7 @@
         {{ syslogclient_logrotate_period }}
         missingok
         notifempty
-	su {{ syslog_user }} adm
+	su root {{ syslog_user }}
 {% if syslogclient_logrotate_compress %}
         compress
         delaycompress
