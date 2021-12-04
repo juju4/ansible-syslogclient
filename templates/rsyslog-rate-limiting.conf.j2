@@ -7,14 +7,14 @@
 {% if not (
     (ansible_virtualization_type is defined and
       (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
-    ) and (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int == 16)
+    ) and not ansible_os_family == 'Debian'
    )
 %}
 $ModLoad imuxsock.so
-$SystemLogRateLimitInterval 5
-$SystemLogRateLimitBurst 2000
 {% endif %}
 
 $ModLoad imjournal
-$imjournalRateLimitInterval 5
+
+# command 'SystemLogRateLimitInterval' is currently not permitted - did you already set it via a RainerScript command (v6+ config)? [v8.1901.0 try https://www.rsyslog.com/e/2222 ]
+$imjournalRateLimitInterval {{ rsyslog_rate_limit_interval }}
 $imjournalRateLimitBurst 2000

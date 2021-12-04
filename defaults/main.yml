@@ -15,6 +15,8 @@ syslogclient_highprecisiontimestamp: true
 # http://www.rsyslog.com/what-are-trusted-properties/
 syslogclient_trusted_properties: false
 
+rsyslog_rate_limit_interval: 5
+
 rsyslog_conf_d:
   - rsyslog-rate-limiting.conf
   # - rsyslog-custom.conf
