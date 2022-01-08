@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+if ($programname == 'node_exporter' or $programname == 'systemd_exporter' or $programname == 'process_exporter' or $programname == 'squid_exporter' or $programname == 'openvpn_exporter') then {{ syslogclient_exporter_syslog_target | default('/var/log/exporter/exporter.log') }}
+{% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}

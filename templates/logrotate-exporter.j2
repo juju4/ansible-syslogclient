@@ -1,0 +1,23 @@
+{{ ansible_managed | comment }}
+
+#
+# /etc/logrotate.d/exporter
+#
+/var/log/exporter/exporter.log {
+    rotate {{ syslogclient_logrotate_rotate|int }}
+    {{ syslogclient_logrotate_period }}
+{% if syslogclient_logrotate_datext %}
+    dateext
+    dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%}
+    missingok
+    notifempty
+{% if syslogclient_logrotate_compress %}
+    compress
+    delaycompress
+{% endif %}
+    create 640 {{ syslog_user }} adm
+    postrotate
+        invoke-rc.d rsyslog rotate > /dev/null
+    endscript
+}
