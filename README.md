@@ -1,7 +1,5 @@
 [![Actions Status - Master](https://github.com/juju4/ansible-syslogclient/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-syslogclient/actions?query=branch%3Amaster)
 [![Actions Status - Devel](https://github.com/juju4/ansible-syslogclient/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-syslogclient/actions?query=branch%3Adevel)
-[![Build Status - Master](https://travis-ci.org/juju4/ansible-syslogclient.svg?branch=master)](https://travis-ci.org/juju4/ansible-syslogclient)
-[![Build Status - Devel](https://travis-ci.org/juju4/ansible-syslogclient.svg?branch=devel)](https://travis-ci.org/juju4/ansible-syslogclient/branches)
 # Remote syslog client ansible role
 
 A simple ansible role to setup system to send syslog to remote system
