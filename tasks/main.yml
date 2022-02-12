@@ -3,13 +3,13 @@
 - name: Include distribution-specific variables
   include_vars: "{{ ansible_distribution }}.yml"
 
-- include: debian.yml
+- import_tasks: debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: redhat.yml
+- import_tasks: redhat.yml
   when: ansible_os_family == "RedHat"
 
-- include: alpine.yml
+- import_tasks: alpine.yml
   when: ansible_distribution == 'Alpine'
 
 - name: enable and start rsyslog service
@@ -44,7 +44,7 @@
 - name: Debug | rsyslog version
   debug: var=rsyslog_v verbosity=1
 
-- include: timestamp.yml
+- import_tasks: timestamp.yml
   when: syslogclient_highprecisiontimestamp
 
 - name: Ensure rsyslog.d directory exists
@@ -133,7 +133,7 @@
         - restart rsyslog
   when: syslogclient_use_json is defined and syslogclient_use_json
 
-- include: remote-auditd.yml
+- import_tasks: remote-auditd.yml
   when: >
     syslogclient_forward_auditd and
     not (ansible_virtualization_type is defined and
@@ -141,9 +141,9 @@
         ) and
     not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
 
-- include: logrotate.yml
+- import_tasks: logrotate.yml
 
-- include: journald.yml
+- import_tasks: journald.yml
   when: >
     (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
     (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
