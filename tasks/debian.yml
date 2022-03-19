@@ -1,6 +1,6 @@
 ---
 
 - name: apt | rsyslog install
-  apt: name=rsyslog state=present
+  ansible.builtin.apt: name=rsyslog state=present
   register: pkg_result
   until: pkg_result is success

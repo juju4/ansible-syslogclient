@@ -1,20 +1,20 @@
 ---
 
 - name: Ensure logrotate package is present
-  package:
+  ansible.builtin.package:
     name: logrotate
     state: present
   register: pkg_result
   until: pkg_result is success
 
 - name: Ensure logrotate.d directory exists
-  file:
+  ansible.builtin.file:
     dest: /etc/logrotate.d
     state: directory
     mode: '0755'
 
 - name: review logrotate configuration
-  replace:
+  ansible.builtin.replace:
     dest: /etc/logrotate.conf
     regexp: "{{ item.re }}"
     replace: "{{ item.rep }}"
@@ -25,28 +25,28 @@
 
 - block:
     - name: Ensure gnupg2 is present
-      package:
+      ansible.builtin.package:
         name: gnupg2
         state: present
     - name: Debug | syslogclient_logrotate_encrypt_keyfile
-      debug: var=syslogclient_logrotate_encrypt_keyfile
+      ansible.builtin.debug: var=syslogclient_logrotate_encrypt_keyfile
     - name: Recover keyid from file
-      slurp:
+      ansible.builtin.slurp:
         src: "{{ syslogclient_logrotate_encrypt_keyfile }}"
       register: keyfile
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
     - name: Debug | keyfile
-      debug: var=keyfile
+      ansible.builtin.debug: var=keyfile
     - name: Set fact for keyid
-      set_fact:
+      ansible.builtin.set_fact:
         syslogclient_logrotate_encrypt_keyid: "{{ keyfile['content'] | b64decode }}"
       when: syslogclient_logrotate_encrypt_keyfile|string and not syslogclient_logrotate_encrypt_keyid|string
     - name: Debug | syslogclient_logrotate_encrypt_keyid
-      debug: var=syslogclient_logrotate_encrypt_keyid
+      ansible.builtin.debug: var=syslogclient_logrotate_encrypt_keyid
   when: syslogclient_logrotate_encrypt|bool
 
 - name: Configure default logrotate
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: /etc/logrotate.conf
     insertafter: '^#compress'
     block: |
@@ -72,7 +72,7 @@
 # validation failed on Alpine if files don't exist
 - block:
     - name: Configure logrotate
-      template:
+      ansible.builtin.template:
         src: "{{ syslogclient_logrotate_syslog_template }}"
         dest: "{{ _logrotate_syslog_cfg }}"
         mode: '0644'
@@ -80,7 +80,7 @@
         validate: 'logrotate -dv %s'
 
     - name: Configure logrotate extras
-      template:
+      ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/etc/logrotate.d/{{ item | basename | regex_replace('^logrotate-', '') }}"
         mode: '0644'
@@ -90,14 +90,14 @@
   when: ansible_distribution != 'Alpine'
 - block:
     - name: Alpine | Configure logrotate
-      template:
+      ansible.builtin.template:
         src: "{{ syslogclient_logrotate_syslog_template }}"
         dest: "{{ _logrotate_syslog_cfg }}"
         mode: '0644'
         backup: "{{ syslogclient_backup | default(false) }}"
 
     - name: Alpine | Configure logrotate extras
-      template:
+      ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/etc/logrotate.d/{{ item | basename }}"
         mode: '0644'

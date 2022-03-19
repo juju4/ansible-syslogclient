@@ -1,7 +1,7 @@
 ---
 
 - name: Include distribution-specific variables
-  include_vars: "{{ ansible_distribution }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
 
 - import_tasks: debian.yml
   when: ansible_os_family == 'Debian'
@@ -13,7 +13,7 @@
   when: ansible_distribution == 'Alpine'
 
 - name: enable and start rsyslog service
-  service: name=rsyslog state=started enabled=yes
+  ansible.builtin.service: name=rsyslog state=started enabled=yes
   when: >
     ansible_os_family != "RedHat" and
     not (ansible_virtualization_type is defined and
@@ -21,40 +21,40 @@
         )
 
 - name: Gather package facts
-  package_facts:
+  ansible.builtin.package_facts:
     manager: auto
   when: ansible_distribution != 'Alpine'
 
 - name: get rsyslog version
-  set_fact:
+  ansible.builtin.set_fact:
     rsyslog_v: "{{ ansible_facts.packages['rsyslog'][0]['version'] }}"
   when: ansible_distribution != 'Alpine'
 
 - name: Alpine | get rsyslog version  # noqa risky-shell-pipe
-  shell: "rsyslogd -v | awk 'match($0, /rsyslogd\\s+([0-9.]+)/, a) { print a[1] }'"
+  ansible.builtin.shell: "rsyslogd -v | awk 'match($0, /rsyslogd\\s+([0-9.]+)/, a) { print a[1] }'"
   changed_when: false
   register: rsyslog_v2
   when: ansible_distribution == 'Alpine'
 
 - name: Alpine | set rsyslog version
-  set_fact:
+  ansible.builtin.set_fact:
     rsyslog_v: "{{ rsyslog_v2.stdout }}"
   when: ansible_distribution == 'Alpine'
 
 - name: Debug | rsyslog version
-  debug: var=rsyslog_v verbosity=1
+  ansible.builtin.debug: var=rsyslog_v verbosity=1
 
 - import_tasks: timestamp.yml
   when: syslogclient_highprecisiontimestamp
 
 - name: Ensure rsyslog.d directory exists
-  file:
+  ansible.builtin.file:
     dest: /etc/rsyslog.d
     state: directory
     mode: '0755'
 
 - name: ensure extra log directory exists
-  file:
+  ansible.builtin.file:
     dest: "{{ item.d }}"
     state: directory
     mode: '0755'
@@ -64,7 +64,7 @@
 
 # FIXME! alternative for Alpine which does not use rsyslog.d
 - name: Configure rsyslog
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/rsyslog.d/{{ item | regex_replace('^rsyslog-', '') }}"
     owner: root
@@ -79,9 +79,9 @@
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
 - block:
     - name: Debug | syslogclient_server
-      debug: var=syslogclient_server
+      ansible.builtin.debug: var=syslogclient_server
     - name: logging to remote syslog
-      template:
+      ansible.builtin.template:
         src: 10-remotesyslog
         dest: /etc/rsyslog.d/10-remotesyslog.conf
         owner: root
@@ -93,9 +93,9 @@
   when: syslogclient_server is defined and syslogclient_server
 
 - name: Debug | ansible_virtualization_type
-  debug: var=ansible_virtualization_type
+  ansible.builtin.debug: var=ansible_virtualization_type
 - name: container config cleaning
-  replace:  # noqa no-tabs
+  ansible.builtin.replace:  # noqa no-tabs
     dest: "{{ item.f }}"
     regexp: "{{ item.re }}"
     replace: "{{ item.rep }}"
@@ -122,7 +122,7 @@
 
 - block:
     - name: logging to remote syslog in json
-      template:
+      ansible.builtin.template:
         src: 01-json-template
         dest: /etc/rsyslog.d/01-json-template.conf
         owner: root

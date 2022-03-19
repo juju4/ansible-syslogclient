@@ -1,7 +1,7 @@
 ---
 
 - name: apk | rsyslog install
-  apk:
+  ansible.builtin.apk:
     name:
       - rsyslog
       - openrc

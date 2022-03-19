@@ -1,21 +1,21 @@
 ---
 
 - name: restart rsyslog
-  service: name=rsyslog state=restarted
+  ansible.builtin.service: name=rsyslog state=restarted
   when: >
     not (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
         )
 
 - name: restart systemd-journald
-  service: name=systemd-journald state=restarted
+  ansible.builtin.service: name=systemd-journald state=restarted
   when: >
     not (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
         )
 
 - name: restart auditd
-  service:
+  ansible.builtin.service:
       name: auditd
       state: restarted
   when: >
@@ -29,7 +29,7 @@
     )
 
 - name: restart auditd - rhel7+
-  command: "service auditd restart"  # noqa command-instead-of-module
+  ansible.builtin.command: "service auditd restart"  # noqa command-instead-of-module
   environment:
       PATH: '/usr/sbin:/usr/bin:/sbin:/bin'
   args:

@@ -1,12 +1,12 @@
 ---
 
 - name: yum | Install rsyslog server
-  yum: name=rsyslog state=present
+  ansible.builtin.yum: name=rsyslog state=present
   register: pkg_result
   until: pkg_result is success
 
 - name: Check FileCreateMode setting
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rsyslog.conf
     regexp: '^\$FileCreateMode .*'
     line: '$FileCreateMode 0640'

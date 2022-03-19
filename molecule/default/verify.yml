@@ -8,28 +8,28 @@
       - /etc/rsyslog.d/10-remotesyslog.conf
   pre_tasks:
     - name: Debian | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         files_test:
           - /etc/rsyslog.d/10-remotesyslog.conf
       when: ansible_distribution == 'Debian' or ansible_os_family == 'RedHat'
   tasks:
     - name: Ensure rsyslog config is present
-      stat:
+      ansible.builtin.stat:
         path: "{{ item }}"
       register: cfg
       with_items: "{{ files_test }}"
     - name: Validate config present
-      assert:
+      ansible.builtin.assert:
         that: item.stat.exists and item.stat.size != 0
       with_items: "{{ cfg.results }}"
 
     - name: Ensure syslog process is running
-      command: pgrep rsyslogd
+      ansible.builtin.command: pgrep rsyslogd
       register: ps
       changed_when: false
       failed_when: false
     - name: Validate ps output
-      assert:
+      ansible.builtin.assert:
         that: ps.stdout
       failed_when: >
         not (ansible_virtualization_type is defined and
