@@ -1,0 +1,3 @@
+{{ ansible_managed | comment }}
+# Drop this as freshclam has its own log file (duplicate)
+if ($programname == 'freshclam') then {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}~{% else %}stop{% endif %}

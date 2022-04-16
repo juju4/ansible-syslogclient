@@ -1,0 +1,20 @@
+{{ ansible_managed | comment }}
+## /etc/logrotate.d/snmpd
+{{ syslogclient_snmpd_syslog_target | default('/var/log/snmpd/snmpd.log') }} {
+    rotate {{ syslogclient_logrotate_rotate|int }}
+    {{ syslogclient_logrotate_period }}
+{% if syslogclient_logrotate_datext %}
+        dateext
+        dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%}
+    missingok
+    notifempty
+{% if syslogclient_logrotate_compress %}
+        compress
+        delaycompress
+{% endif %}
+    create 640 {{ syslog_user }} adm
+    postrotate
+        systemctl reload snmpd > /dev/null
+    endscript
+}

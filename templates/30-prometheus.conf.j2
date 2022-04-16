@@ -1,0 +1,7 @@
+{{ ansible_managed | comment }}
+if ($programname == 'prometheus') then {{ syslogclient_prometheus_syslog_target | default('/var/log/prometheus.log') }}
+{% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
