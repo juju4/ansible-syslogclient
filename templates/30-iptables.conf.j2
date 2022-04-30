@@ -1,23 +1,23 @@
 {{ ansible_managed | comment }}
-if $programname == 'iptables' then             -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
+if ($programname == 'kernel' and $msg contains 'iptables') then             -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
 & stop
 {% endif %}
-:msg, contains, "iptables denied: " -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
+if ($programname == 'kernel' and $msg contains 'iptables denied:') then             -{{ syslogclient_iptables_syslog_target | default('/var/log/iptables/iptables.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
 & stop
 {% endif %}
-if $programname == 'i6ptables' then             -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
+if ($programname == 'kernel' and $msg contains 'ip6tables') then             -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
 & stop
 {% endif %}
-:msg, contains, "ip6tables denied: " -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
+if ($programname == 'kernel' and $msg contains 'ip6tables denied:') then             -{{ syslogclient_ip6tables_syslog_target | default('/var/log/iptables/ip6tables.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
