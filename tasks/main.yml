@@ -77,7 +77,8 @@
 
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
-- block:
+- name: Syslog remote server
+  block:
     - name: Debug | syslogclient_server
       ansible.builtin.debug: var=syslogclient_server
     - name: logging to remote syslog
@@ -120,7 +121,8 @@
       (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
     ) and ansible_os_family == "Debian"
 
-- block:
+- name: json
+  block:
     - name: logging to remote syslog in json
       ansible.builtin.template:
         src: 01-json-template

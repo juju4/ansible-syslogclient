@@ -23,7 +23,8 @@
     - { re: '^(weekly|daily|monthly)', rep: "{{ syslogclient_logrotate_period }}" }
     - { re: '^rotate .*', rep: "rotate {{ syslogclient_logrotate_rotate|int }}" }
 
-- block:
+- name: logrotate encrypt
+  block:
     - name: Ensure gnupg2 is present
       ansible.builtin.package:
         name: gnupg2
@@ -70,7 +71,8 @@
       {% endif%}
 
 # validation failed on Alpine if files don't exist
-- block:
+- name: Linux Not Alpine
+  block:
     - name: Configure logrotate
       ansible.builtin.template:
         src: "{{ syslogclient_logrotate_syslog_template }}"
@@ -88,7 +90,8 @@
         validate: 'logrotate -dv %s'
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
   when: ansible_distribution != 'Alpine'
-- block:
+- name: Linux Alpine
+  block:
     - name: Alpine | Configure logrotate
       ansible.builtin.template:
         src: "{{ syslogclient_logrotate_syslog_template }}"
