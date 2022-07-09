@@ -21,7 +21,7 @@
     backup: "{{ syslogclient_backup | default(false) }}"
   with_items:
     - { re: '^(weekly|daily|monthly)', rep: "{{ syslogclient_logrotate_period }}" }
-    - { re: '^rotate .*', rep: "rotate {{ syslogclient_logrotate_rotate|int }}" }
+    - { re: '^rotate .*', rep: "rotate {{ syslogclient_logrotate_rotate | int }}" }
 
 - name: logrotate encrypt
   block:
@@ -64,7 +64,7 @@
       {% if syslogclient_logrotate_shred %}
       shred
       {% endif%}
-      {% if syslogclient_logrotate_encrypt and syslogclient_logrotate_encrypt_keyid|string %}
+      {% if syslogclient_logrotate_encrypt and (syslogclient_logrotate_encrypt_keyid | string) %}
       compresscmd /usr/bin/gpg2
       compressoptions --encrypt --always-trust -r {{ syslogclient_logrotate_encrypt_keyid }}
       compressext .gpg
