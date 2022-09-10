@@ -1,6 +1,6 @@
 ---
 
-- name: apk | rsyslog install
+- name: Alpine | rsyslog install
   ansible.builtin.apk:
     name:
       - rsyslog

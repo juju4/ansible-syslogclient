@@ -1,6 +1,6 @@
 ---
 
-- name: yum | Install rsyslog server
+- name: Redhat | Install rsyslog server
   ansible.builtin.yum: name=rsyslog state=present
   register: pkg_result
   until: pkg_result is success
@@ -13,7 +13,7 @@
     insertbefore: '^### RULES ###'
     backup: "{{ syslogclient_backup | default(false) }}"
 
-- name: allow rsyslogd to connect non-standard ports with selinux
+- name: Allow rsyslogd to connect non-standard ports with selinux
   community.general.seport:
     ports: "{{ item.port }}"
     proto: "{{ item.proto }}"

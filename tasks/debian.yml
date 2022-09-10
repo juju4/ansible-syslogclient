@@ -1,6 +1,6 @@
 ---
 
-- name: apt | rsyslog install
+- name: Debian | rsyslog install
   ansible.builtin.apt: name=rsyslog state=present
   register: pkg_result
   until: pkg_result is success

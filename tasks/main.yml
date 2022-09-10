@@ -12,7 +12,7 @@
 - import_tasks: alpine.yml
   when: ansible_distribution == 'Alpine'
 
-- name: enable and start rsyslog service
+- name: Enable and start rsyslog service
   ansible.builtin.service: name=rsyslog state=started enabled=yes
   when: >
     ansible_os_family != "RedHat" and
@@ -25,7 +25,7 @@
     manager: auto
   when: ansible_distribution != 'Alpine'
 
-- name: get rsyslog version
+- name: Get rsyslog version
   ansible.builtin.set_fact:
     rsyslog_v: "{{ ansible_facts.packages['rsyslog'][0]['version'] }}"
   when: ansible_distribution != 'Alpine'
@@ -53,7 +53,7 @@
     state: directory
     mode: '0755'
 
-- name: ensure extra log directory exists
+- name: Ensure extra log directory exists
   ansible.builtin.file:
     dest: "{{ item.d }}"
     state: directory
@@ -72,7 +72,7 @@
     mode: '0644'
     validate: 'rsyslogd -N2 -f %s'
   notify:
-    - restart rsyslog
+    - Restart rsyslog
   with_items: "{{ rsyslog_conf_d | default([]) }}"
 
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
@@ -81,7 +81,7 @@
   block:
     - name: Debug | syslogclient_server
       ansible.builtin.debug: var=syslogclient_server
-    - name: logging to remote syslog
+    - name: Logging to remote syslog
       ansible.builtin.template:
         src: 10-remotesyslog
         dest: /etc/rsyslog.d/10-remotesyslog.conf
@@ -90,12 +90,12 @@
         mode: '0644'
         validate: 'rsyslogd -N2 -f %s'
       notify:
-        - restart rsyslog
+        - Restart rsyslog
   when: syslogclient_server is defined and syslogclient_server
 
 - name: Debug | ansible_virtualization_type
   ansible.builtin.debug: var=ansible_virtualization_type
-- name: container config cleaning
+- name: Container config cleaning
   ansible.builtin.replace:  # noqa no-tabs
     dest: "{{ item.f }}"
     regexp: "{{ item.re }}"
@@ -115,15 +115,15 @@
     ## FIXME! when enabled, kills all logging ...
     # - { f: '/etc/rsyslog.d/21-cloudinit.conf', re: '^\\& \\~', rep: 'stop' }
   notify:
-    - restart rsyslog
+    - Restart rsyslog
   when: >
     (ansible_virtualization_type is defined and
       (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
     ) and ansible_os_family == "Debian"
 
-- name: json
+- name: Json
   block:
-    - name: logging to remote syslog in json
+    - name: Logging to remote syslog in json
       ansible.builtin.template:
         src: 01-json-template
         dest: /etc/rsyslog.d/01-json-template.conf
@@ -132,7 +132,7 @@
         mode: '0644'
         validate: 'rsyslogd -N2 -f %s'
       notify:
-        - restart rsyslog
+        - Restart rsyslog
   when: syslogclient_use_json is defined and syslogclient_use_json
 
 - import_tasks: remote-auditd.yml
