@@ -1,7 +1,9 @@
 ---
 
 - name: Redhat | Install rsyslog server
-  ansible.builtin.yum: name=rsyslog state=present
+  ansible.builtin.yum:
+    name: rsyslog
+    state: present
   register: pkg_result
   until: pkg_result is success
 

@@ -24,27 +24,30 @@
     - { re: '^rotate .*', rep: "rotate {{ syslogclient_logrotate_rotate | int }}" }
 
 - name: Logrotate encrypt
+  when: syslogclient_logrotate_encrypt | bool
   block:
     - name: Ensure gnupg2 is present
       ansible.builtin.package:
         name: gnupg2
         state: present
     - name: Debug | syslogclient_logrotate_encrypt_keyfile
-      ansible.builtin.debug: var=syslogclient_logrotate_encrypt_keyfile
+      ansible.builtin.debug:
+        var: syslogclient_logrotate_encrypt_keyfile
     - name: Recover keyid from file
       ansible.builtin.slurp:
         src: "{{ syslogclient_logrotate_encrypt_keyfile }}"
       register: keyfile
       when: syslogclient_logrotate_encrypt_keyfile | string and not syslogclient_logrotate_encrypt_keyid | string
     - name: Debug | keyfile
-      ansible.builtin.debug: var=keyfile
+      ansible.builtin.debug:
+        var: keyfile
     - name: Set fact for keyid
       ansible.builtin.set_fact:
         syslogclient_logrotate_encrypt_keyid: "{{ keyfile['content'] | b64decode }}"
       when: syslogclient_logrotate_encrypt_keyfile | string and not syslogclient_logrotate_encrypt_keyid | string
     - name: Debug | syslogclient_logrotate_encrypt_keyid
-      ansible.builtin.debug: var=syslogclient_logrotate_encrypt_keyid
-  when: syslogclient_logrotate_encrypt | bool
+      ansible.builtin.debug:
+        var: syslogclient_logrotate_encrypt_keyid
 
 - name: Configure default logrotate
   ansible.builtin.blockinfile:
@@ -72,6 +75,7 @@
 
 # validation failed on Alpine if files don't exist
 - name: Linux Not Alpine
+  when: ansible_distribution != 'Alpine'
   block:
     - name: Configure logrotate
       ansible.builtin.template:
@@ -89,8 +93,8 @@
         backup: "{{ syslogclient_backup | default(false) }}"
         validate: 'logrotate -dv %s'
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
-  when: ansible_distribution != 'Alpine'
 - name: Linux Alpine
+  when: ansible_distribution == 'Alpine'
   block:
     - name: Alpine | Configure logrotate
       ansible.builtin.template:
@@ -106,4 +110,3 @@
         mode: '0644'
         backup: "{{ syslogclient_backup | default(false) }}"
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
-  when: ansible_distribution == 'Alpine'
