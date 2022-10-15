@@ -3,6 +3,17 @@
 - name: Include distribution-specific variables
   ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
 
+- name: Set fact is_container
+  ansible.builtin.set_fact:
+    is_container: true
+  when: >
+    (ansible_virtualization_type is defined and
+      (ansible_virtualization_type == "docker"
+       or ansible_virtualization_type == "containerd"
+       or ansible_virtualization_type == "container"
+      )
+    )
+
 - name: Import debian
   ansible.builtin.import_tasks: debian.yml
   when: ansible_os_family == 'Debian'
@@ -22,9 +33,7 @@
     enabled: yes
   when: >
     ansible_os_family != "RedHat" and
-    not (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-        )
+    not is_container|bool
 
 - name: Gather package facts
   ansible.builtin.package_facts:
@@ -128,9 +137,8 @@
   notify:
     - Restart rsyslog
   when: >
-    (ansible_virtualization_type is defined and
-      (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
-    ) and ansible_os_family == "Debian"
+    is_container|bool
+    and ansible_os_family == "Debian"
 
 - name: Json
   when: syslogclient_use_json is defined and syslogclient_use_json
@@ -150,9 +158,7 @@
   ansible.builtin.import_tasks: remote-auditd.yml
   when: >
     syslogclient_forward_auditd and
-    not (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
-        ) and
+    not is_container|bool and
     not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
 
 - name: Import logrotate
