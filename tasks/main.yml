@@ -26,6 +26,12 @@
   ansible.builtin.import_tasks: alpine.yml
   when: ansible_distribution == 'Alpine'
 
+- name: Ensure rsyslog-relp is present
+  ansible.builtin.package:
+    name: rsyslog-relp
+    state: present
+  when: syslogclient_use_relp|bool
+
 - name: Enable and start rsyslog service
   ansible.builtin.service:
     name: rsyslog

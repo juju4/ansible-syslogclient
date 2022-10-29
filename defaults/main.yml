@@ -9,6 +9,7 @@ audisp_syslog_target: /var/log/audispd/audispd.log
 # syslogclient_audispd_syslog_target: '@@192.168.100.100'
 ## forwarding to logstash?
 syslogclient_use_json: false
+syslogclient_use_relp: false
 
 syslogclient_highprecisiontimestamp: true
 

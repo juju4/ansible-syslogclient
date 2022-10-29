@@ -7,6 +7,12 @@
     https_proxy: "{{ lookup('env', 'https_proxy') }}"
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
+  vars:
+    syslogclient_use_relp: true
+    rsyslog_conf_d:
+      - rsyslog-rate-limiting.conf
+      - 10-remote-rsyslog
+      - 10-remote-rsyslog-relp
   pre_tasks:
     - name: Ubuntu | Install python3
       ansible.builtin.raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
