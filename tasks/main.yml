@@ -107,16 +107,6 @@
     - name: Debug | syslogclient_server
       ansible.builtin.debug:
         var: syslogclient_server
-    - name: Logging to remote syslog
-      ansible.builtin.template:
-        src: 10-remote-syslog.j2
-        dest: /etc/rsyslog.d/10-remote-syslog.conf
-        owner: root
-        group: root
-        mode: '0644'
-        validate: 'rsyslogd -N2 -f %s'
-      notify:
-        - Restart rsyslog
 
 - name: Debug | ansible_virtualization_type
   ansible.builtin.debug:
