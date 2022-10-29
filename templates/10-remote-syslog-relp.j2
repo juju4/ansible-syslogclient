@@ -32,4 +32,3 @@ action(type="omrelp" target="{{ syslogclient_server }}" port="{{ syslogclient_se
 $template customFormat,"%timegenerated:::date-rfc3339% <%pri-text%> %HOSTNAME% %syslogtag% %msg%\n"
 
 *.*     :omrelp:{{ syslogclient_server }}:{{ syslogclient_server_port }}:customFormat
-{% endif %}
