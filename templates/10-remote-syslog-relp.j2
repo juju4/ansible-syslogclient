@@ -9,7 +9,7 @@ $ActionQueueSaveOnShutdown  on      # save messages to disk on shutdown
 $ActionQueueTimeoutEnqueue  0       # Drop messages with no wait when they can’t be queued
 
 # Requires pkg rsyslog-relp
-module(load="omrelp") # provides support for sending RELP messages (over TCP)
+# module(load="omrelp") # provides support for sending RELP messages (over TCP)
 module(load="immark" interval="300")  # provides --MARK-- message capability
 
 {% if syslogclient_use_tls is defined and syslogclient_use_tls %}
