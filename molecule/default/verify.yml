@@ -5,7 +5,8 @@
   vars:
     files_test:
       - /etc/rsyslog.d/50-default.conf
-      - /etc/rsyslog.d/10-remotesyslog.conf
+      - /etc/rsyslog.d/10-remote-syslog.conf
+      - /etc/rsyslog.d/10-remote-syslog-relp.conf
   pre_tasks:
     - name: Debug | var ansible_virtualization_type
       ansible.builtin.debug:
@@ -23,7 +24,8 @@
     - name: Debian | set fact
       ansible.builtin.set_fact:
         files_test:
-          - /etc/rsyslog.d/10-remotesyslog.conf
+          - /etc/rsyslog.d/10-remote-syslog.conf
+          - /etc/rsyslog.d/10-remote-syslog-relp.conf
       when: ansible_distribution == 'Debian' or ansible_os_family == 'RedHat'
   tasks:
     - name: Ensure rsyslog config is present
