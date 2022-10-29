@@ -109,8 +109,8 @@
         var: syslogclient_server
     - name: Logging to remote syslog
       ansible.builtin.template:
-        src: 10-remotesyslog
-        dest: /etc/rsyslog.d/10-remotesyslog.conf
+        src: 10-remote-syslog.j2
+        dest: /etc/rsyslog.d/10-remote-syslog.conf
         owner: root
         group: root
         mode: '0644'
