@@ -31,4 +31,4 @@ action(type="omrelp" target="{{ syslogclient_server }}" port="{{ syslogclient_se
 # https://www.rsyslog.com/doc/v8-stable/configuration/properties.html
 $template customFormat,"%timegenerated:::date-rfc3339% <%pri-text%> %HOSTNAME% %syslogtag% %msg%\n"
 
-*.*     :omrelp:{{ syslogclient_server }}:{{ syslogclient_server_port }}:customFormat
+*.*     :omrelp:{{ syslogclient_server }}:{{ syslogclient_server_port }};customFormat
