@@ -26,11 +26,10 @@
     )
 
 - name: Restart auditd - rhel7+
-  ansible.builtin.command: "service auditd restart"  # noqa command-instead-of-module
+  ansible.builtin.command:  # noqa no-changed-when command-instead-of-module
+    cmd: "service auditd restart"
   environment:
     PATH: '/usr/sbin:/usr/bin:/sbin:/bin'
-  args:
-    warn: False
   when: >
     not is_container|bool and
     (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7)

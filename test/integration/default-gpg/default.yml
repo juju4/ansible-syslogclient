@@ -1,6 +1,7 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
     syslogclient_logrotate_encrypt: true
     syslogclient_logrotate_encrypt_keyid: ''
@@ -12,12 +13,11 @@
     gpg_user: "{{ ansible_user }}"
     gpg_pull: false
   pre_tasks:
-    - set_fact:
+    - name: Set fact
+      ansible.builtin.set_fact:
         rsyslog_conf_d: []
-      when: not (
-        (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
-        )
+      when: not ((ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7) or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int >= 16))
   roles:
     - juju4.gpgkey_generate
     - juju4.syslogclient

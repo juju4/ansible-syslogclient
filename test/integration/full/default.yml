@@ -1,27 +1,27 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
-    - rsyslog_conf_d:
-        - 49-bash2syslog.conf
-        - 30-ansible.conf
-        - 30-iptables.conf
-        - 30-snmpd.conf
-        - 30-dnscryptproxy.conf
-        - 30-osqueryd.conf
-    - rsyslog_conf_d_extradirs:
-        - { d: /var/log/ansible }
-        - { d: /var/log/iptables }
-        - { d: /var/log/snmpd }
-    - syslogclient_logrotate_syslog_template_extras:
-        - logrotate-iptables
-        - logrotate-osquery
+    rsyslog_conf_d:
+      - 49-bash2syslog.conf
+      - 30-ansible.conf
+      - 30-iptables.conf
+      - 30-snmpd.conf
+      - 30-dnscryptproxy.conf
+      - 30-osqueryd.conf
+    rsyslog_conf_d_extradirs:
+      - { d: /var/log/ansible }
+      - { d: /var/log/iptables }
+      - { d: /var/log/snmpd }
+    syslogclient_logrotate_syslog_template_extras:
+      - logrotate-iptables
+      - logrotate-osquery
   pre_tasks:
-    - set_fact:
+    - name: Set fact
+      ansible.builtin.set_fact:
         rsyslog_conf_d: []
-      when: not (
-        (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
-        )
+      when: not ((ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7) or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int >= 16))
   roles:
     - juju4.syslogclient
