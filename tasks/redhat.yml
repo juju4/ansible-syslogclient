@@ -1,8 +1,16 @@
 ---
 
+# https://github.com/rsyslog/rsyslog/issues/5096
+# https://github.com/ansible/awx/pull/13395
+- name: Redhat9 | Pin rsyslog version - capabilities issues
+  ansible.builtin.set_fact:
+    rsyslog_pkg: rsyslog-8.2102.0-106.el9
+  when:
+    - ansible_distribution_major_version|int == 9
+
 - name: Redhat | Install rsyslog server
   ansible.builtin.yum:
-    name: rsyslog
+    name: "{{ rsyslog_pkg | default('rsyslog') }}"
     state: present
   register: pkg_result
   until: pkg_result is success
