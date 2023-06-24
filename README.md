@@ -55,6 +55,13 @@ $ vagrant ssh
 
 ## Troubleshooting & Known issues
 
+* RedHat/RockyLinux 9: `rsyslog internal message (3,-2455): could not transfer  the  specified  internal posix  capabilities settings to the kernel, capng_apply=-5`
+  * https://bugzilla.redhat.com/show_bug.cgi?id=2216919
+  * https://github.com/rsyslog/rsyslog/issues/5159
+  * https://github.com/ansible/awx/issues/13412
+  * https://bugs.launchpad.net/tripleo/+bug/2003777
+  * https://www.syslog-ng.com/community/b/blog/posts/working-around-linux-capabilities-problems-for-syslog-ng
+
 ## Other references
 
 * https://insights.ubuntu.com/wp-content/uploads/Whitepaper-CentralisedLogging-v11.pdf
