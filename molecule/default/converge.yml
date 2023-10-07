@@ -9,7 +9,7 @@
   remote_user: root
   vars:
     syslogclient_use_relp: true
-    rsyslog_conf_d:
+    syslogclient_rsyslog_conf_d:
       - rsyslog-rate-limiting.conf
       - 10-remote-syslog.conf
       - 10-remote-syslog-relp.conf

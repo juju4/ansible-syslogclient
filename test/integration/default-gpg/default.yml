@@ -15,7 +15,7 @@
   pre_tasks:
     - name: Set fact
       ansible.builtin.set_fact:
-        rsyslog_conf_d: []
+        syslogclient_rsyslog_conf_d: []
       when: not ((ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7) or
         (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int >= 16))
   roles:

@@ -18,11 +18,11 @@ syslogclient_trusted_properties: false
 
 rsyslog_rate_limit_interval: 5
 
-rsyslog_conf_d:
+syslogclient_rsyslog_conf_d:
   - rsyslog-rate-limiting.conf
   # - rsyslog-custom.conf
 
-rsyslog_conf_d_extradirs:
+syslogclient_rsyslog_conf_d_extradirs:
   - { d: /var/log/ansible }
   - { d: /var/log/snmpd }
   # - { d: /var/log/app, o: _appuser }

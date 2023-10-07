@@ -84,7 +84,7 @@
     mode: '0755'
     owner: "{{ item.o | default(syslog_user) }}"
     group: root
-  with_items: "{{ rsyslog_conf_d_extradirs }}"
+  with_items: "{{ syslogclient_rsyslog_conf_d_extradirs }}"
 
 # FIXME! alternative for Alpine which does not use rsyslog.d
 - name: Configure rsyslog
@@ -97,7 +97,7 @@
     validate: 'rsyslogd -N2 -f %s'
   notify:
     - Restart rsyslog
-  with_items: "{{ rsyslog_conf_d | default([]) }}"
+  with_items: "{{ syslogclient_rsyslog_conf_d | default([]) }}"
 
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
