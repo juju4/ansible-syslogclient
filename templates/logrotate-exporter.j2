@@ -18,6 +18,7 @@
 {% endif %}
     create 640 {{ syslog_user }} adm
     postrotate
-        invoke-rc.d rsyslog rotate > /dev/null
+        # invoke-rc.d rsyslog rotate > /dev/null
+        /usr/lib/rsyslog/rsyslog-rotate > /tmp/logrotate-rsyslog-rotate 2>&1
     endscript
 }
