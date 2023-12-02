@@ -5,4 +5,4 @@ collections:
   - community.general
 
 roles:
-  - juju4.gpgkey_generate
+  - name: juju4.gpgkey_generate
