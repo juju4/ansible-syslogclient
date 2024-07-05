@@ -9,7 +9,7 @@
     - ansible_distribution_major_version|int == 9
 
 - name: Redhat | Install rsyslog server
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ rsyslog_pkg | default('rsyslog') }}"
     state: present
   register: pkg_result
