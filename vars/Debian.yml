@@ -2,4 +2,4 @@
 
 _logrotate_syslog_cfg: /etc/logrotate.d/rsyslog
 syslog_user: root
-varlog_group: syslog
+varlog_group: adm
