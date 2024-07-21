@@ -1,0 +1,4 @@
+{{ ansible_managed | comment }}
+# lynis already sends output to /var/log/lynis.log as root
+# no point to rewrite same thing with syslog user locally
+if ($programname == 'lynis') then stop
