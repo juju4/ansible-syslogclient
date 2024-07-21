@@ -134,7 +134,7 @@
     - Restart rsyslog
   when: >
     is_container|bool
-    and ansible_os_family == "Debian"
+    and ansible_distribution == "Ubuntu"
 
 - name: Json
   when: syslogclient_use_json is defined and syslogclient_use_json
