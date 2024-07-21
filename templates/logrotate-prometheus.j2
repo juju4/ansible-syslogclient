@@ -1,0 +1,19 @@
+{{ ansible_managed | comment }}
+## /etc/logrotate.d/prometheus
+/var/log/prometheus.log {
+    rotate {{ syslogclient_logrotate_rotate|int }}
+    {{ syslogclient_logrotate_period }}
+{% if syslogclient_logrotate_datext is defined and syslogclient_logrotate_datext|string %}
+    dateext
+    dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%}
+    missingok
+{% if syslogclient_logrotate_compress %}
+    compress
+    delaycompress
+{% endif %}
+    create 640 {{ syslog_user | default('root') }} adm
+    sharedscripts
+    # Ubuntu: parent directory has insecure permissions (It's world writable or writable by group which is not "root")
+    su root {{ prometheus_syslog_dir_group | default(varlog_group) }}
+}
