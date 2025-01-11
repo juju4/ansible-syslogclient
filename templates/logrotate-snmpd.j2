@@ -16,5 +16,8 @@
     create 640 {{ syslog_user }} adm
     postrotate
         systemctl reload snmpd > /dev/null
+{% for cmd in syslog_postrotate_extras_cmd %}
+        {{ cmd }}
+{% endfor %}
     endscript
 }

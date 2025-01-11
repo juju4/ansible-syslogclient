@@ -47,6 +47,8 @@ syslogclient_logrotate_shred: true
 syslogclient_logrotate_encrypt: false
 syslogclient_logrotate_encrypt_keyid: ''
 syslogclient_logrotate_encrypt_keyfile: ''
+# example: add extra acl for backup or log agent
+syslog_postrotate_extras_cmd: []
 
 ## only valid with tcp (Work in progress option)
 syslogclient_use_tls: false

@@ -15,6 +15,13 @@
 {% endif %}
     create 640 {{ syslog_user | default('root') }} adm
     sharedscripts
+{% if syslog_postrotate_extras_cmd %}
+    postrotate
+{% for cmd in syslog_postrotate_extras_cmd %}
+        {{ cmd }}
+{% endfor %}
+    endscript
+{% endif %}
 }
 
 {% if osquery_syslog_target is defined and osquery_syslog_target != '' and '/var/log/' in osquery_syslog_target %}
@@ -39,5 +46,12 @@
     sharedscripts
     # Ubuntu: parent directory has insecure permissions (It's world writable or writable by group which is not "root")
     su root {{ osquery_syslog_dir_group | default(varlog_group) }}
+{% if syslog_postrotate_extras_cmd %}
+    postrotate
+{% for cmd in syslog_postrotate_extras_cmd %}
+        {{ cmd }}
+{% endfor %}
+    endscript
+{% endif %}
 }
 {% endif %}

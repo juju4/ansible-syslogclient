@@ -21,5 +21,8 @@
     sharedscripts
     postrotate
         /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+{% for cmd in syslog_postrotate_extras_cmd %}
+        {{ cmd }}
+{% endfor %}
     endscript
 }

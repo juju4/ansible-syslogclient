@@ -16,4 +16,11 @@
     sharedscripts
     # Ubuntu: parent directory has insecure permissions (It's world writable or writable by group which is not "root")
     su root {{ prometheus_syslog_dir_group | default(varlog_group) }}
+{% if syslog_postrotate_extras_cmd %}
+    postrotate
+{% for cmd in syslog_postrotate_extras_cmd %}
+        {{ cmd }}
+{% endfor %}
+    endscript
+{% endif %}
 }
