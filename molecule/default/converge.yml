@@ -9,11 +9,9 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
-    syslogclient_use_relp: true
     syslogclient_rsyslog_conf_d:
       - rsyslog-rate-limiting.conf
       - 10-remote-syslog.conf
-      - 10-remote-syslog-relp.conf
     syslogclient_server: localhost
     syslogclient_server_port: 20514
   pre_tasks:
