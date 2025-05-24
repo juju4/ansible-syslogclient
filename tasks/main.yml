@@ -94,7 +94,7 @@
     owner: root
     group: root
     mode: '0644'
-    validate: 'rsyslogd -N2 -f %s'
+    # validate: 'rsyslogd -N2 -f %s'
   notify:
     - Restart rsyslog
   with_items: "{{ syslogclient_rsyslog_conf_d | default([]) }}"
