@@ -21,6 +21,16 @@
            or ansible_virtualization_type == "container"
           )
         )
+    - name: Ensure procps package is present
+      ansible.builtin.package:
+        name: procps
+        state: present
+      when: ansible_os_family == "RedHat"
+    - name: Debian | Ensure ps/pgrep is present
+      ansible.builtin.package:
+        name: procps
+        state: present
+      when: ansible_os_family == "Debian"
     - name: Debian | set fact
       ansible.builtin.set_fact:
         files_test:
@@ -37,6 +47,15 @@
         that: item.stat.exists and item.stat.size != 0
       with_items: "{{ cfg.results }}"
 
+    - name: Check all processes
+      ansible.builtin.command: ps aux
+      changed_when: false
+      register: psa
+    - name: Debug | ps aux output
+      ansible.builtin.debug:
+        var: psa
+        verbosity: 1
+
     - name: Ensure syslog process is running
       ansible.builtin.command: pgrep rsyslogd
       register: ps
@@ -45,7 +64,7 @@
     - name: Validate ps output
       ansible.builtin.assert:
         that: ps.stdout
-      failed_when:
+      when:
         - not is_container|bool
 
     - name: Get few logs
@@ -58,5 +77,5 @@
       ansible.builtin.assert:
         that:
           - "ansible_date_time.year in logs.stdout"
-      failed_when:
+      when:
         - not is_container|bool
