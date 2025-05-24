@@ -3,7 +3,7 @@
 - name: Enable high precision timestamp
   ansible.builtin.replace:
     dest: /etc/rsyslog.conf
-    regexp: '^$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
+    regexp: '^\$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
     replace: '#$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat'
     owner: root
     group: root
