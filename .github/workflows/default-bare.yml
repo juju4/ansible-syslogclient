@@ -93,6 +93,8 @@ jobs:
         continue-on-error: true
       - name: After script - systemd
         run: |
+          sudo systemctl status rsyslog -l --no-pager || true
+          systemd-analyze --no-pager security rsyslog || true
           systemd-analyze --no-pager security || true
           rsyslogd -v
         if: ${{ always() }}
