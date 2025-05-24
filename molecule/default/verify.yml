@@ -48,3 +48,16 @@
         that: ps.stdout
       failed_when:
         - not is_container|bool
+
+    - name: Get few logs
+      ansible.builtin.command:
+        cmd: tail -5 /var/log/syslog
+      register: logs
+      changed_when: false
+      failed_when: false
+    - name: Ensure year is present (full timestamp)
+      ansible.builtin.assert:
+        that:
+          - "ansible_date_time.year in logs.stdout"
+      failed_when:
+        - not is_container|bool
