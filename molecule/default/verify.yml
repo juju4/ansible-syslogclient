@@ -1,7 +1,7 @@
 ---
 
 - name: Verify
-  hosts: syslogclient
+  hosts: "{{ playbook_hosts | default('all') }}"
   vars:
     files_test:
       - /etc/rsyslog.d/50-default.conf
