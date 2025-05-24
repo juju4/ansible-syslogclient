@@ -1,0 +1,8 @@
+---
+
+collections:
+  - ansible.posix
+  - community.general
+
+roles:
+  - name: juju4.gpgkey_generate

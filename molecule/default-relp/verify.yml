@@ -1,0 +1,64 @@
+---
+
+- name: Verify
+  hosts: "{{ playbook_hosts | default('all') }}"
+  vars:
+    files_test:
+      - /etc/rsyslog.d/50-default.conf
+      - /etc/rsyslog.d/10-remote-syslog.conf
+      - /etc/rsyslog.d/10-remote-syslog-relp.conf
+    is_container: false
+  pre_tasks:
+    - name: Debug | var ansible_virtualization_type
+      ansible.builtin.debug:
+        var: ansible_virtualization_type
+    - name: Set fact is_container
+      ansible.builtin.set_fact:
+        is_container: true
+      when: >
+        (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker"
+           or ansible_virtualization_type == "containerd"
+           or ansible_virtualization_type == "container"
+          )
+        )
+    - name: Debian | set fact
+      ansible.builtin.set_fact:
+        files_test:
+          - /etc/rsyslog.d/10-remote-syslog.conf
+          - /etc/rsyslog.d/10-remote-syslog-relp.conf
+      when: ansible_distribution == 'Debian' or ansible_os_family == 'RedHat'
+  tasks:
+    - name: Ensure rsyslog config is present
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: cfg
+      with_items: "{{ files_test }}"
+    - name: Validate config present
+      ansible.builtin.assert:
+        that: item.stat.exists and item.stat.size != 0
+      with_items: "{{ cfg.results }}"
+
+    - name: Ensure syslog process is running
+      ansible.builtin.command: pgrep rsyslogd
+      register: ps
+      changed_when: false
+      failed_when: false
+    - name: Validate ps output
+      ansible.builtin.assert:
+        that: ps.stdout
+      failed_when:
+        - not is_container|bool
+
+    - name: Get few logs
+      ansible.builtin.command:
+        cmd: tail -5 /var/log/syslog
+      register: logs
+      changed_when: false
+      failed_when: false
+    - name: Ensure year is present (full timestamp)
+      ansible.builtin.assert:
+        that:
+          - "ansible_date_time.year in logs.stdout"
+      failed_when:
+        - not is_container|bool
