@@ -4,14 +4,6 @@
 # https://access.redhat.com/solutions/156863
 # https://www.rivy.org/2013/03/howto-adapt-the-rate-limiting-of-rsyslog/
 # or journald: https://www.rootusers.com/how-to-change-log-rate-limiting-in-linux/
-{% if not (
-    (ansible_virtualization_type is defined and
-      (ansible_virtualization_type == "lxc" or ansible_virtualization_type == "docker")
-    ) and not ansible_os_family == 'Debian'
-   )
-%}
-$ModLoad imuxsock.so
-{% endif %}
 
 $ModLoad imjournal
 
