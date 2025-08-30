@@ -1,5 +1,5 @@
 {{ ansible_managed | comment }}
-if ($programname == 'python' or $programname == 'python3') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
+if ($programname == 'python' or $programname startswith 'python3') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
 {% else %}
