@@ -102,7 +102,7 @@
 ## http://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
 ## Note: Alpine only has one file /etc/rsyslog.conf, how to cleanly include config block inside?
 - name: Syslog remote server
-  when: syslogclient_server is defined and syslogclient_server
+  when: syslogclient_server is defined and syslogclient_server | length > 0
   block:
     - name: Debug | syslogclient_server
       ansible.builtin.debug:
@@ -132,12 +132,12 @@
     # - { f: '/etc/rsyslog.d/21-cloudinit.conf', re: '^\\& \\~', rep: 'stop' }
   notify:
     - Restart rsyslog
-  when: >
-    is_container|bool
-    and ansible_distribution == "Ubuntu"
+  when:
+    - is_container|bool
+    - ansible_distribution == "Ubuntu"
 
 - name: Json
-  when: syslogclient_use_json is defined and syslogclient_use_json
+  when: syslogclient_use_json is defined and syslogclient_use_json | bool
   block:
     - name: Logging to remote syslog in json
       ansible.builtin.template:
@@ -152,10 +152,10 @@
 
 - name: Import remote-auditd
   ansible.builtin.import_tasks: remote-auditd.yml
-  when: >
-    syslogclient_forward_auditd and
-    not is_container|bool and
-    not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
+  when:
+    - syslogclient_forward_auditd | bool
+    - not is_container|bool
+    - not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
 
 - name: Import logrotate
   ansible.builtin.import_tasks: logrotate.yml
