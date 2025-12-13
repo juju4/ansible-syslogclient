@@ -83,7 +83,10 @@
         dest: "{{ _logrotate_syslog_cfg }}"
         mode: '0644'
         backup: "{{ syslogclient_backup | default(false) }}"
-        validate: 'logrotate -dv %s'
+        # error: Ignoring /home/deploy/.ansible/tmp/ansible-tmp-1765116116.4866316-925225-155179467086230/.source because the file owner is wrong (should be root or user with uid 0).
+        # only a command, not a shell
+        # validate: 'chown root %s && logrotate -dv %s'
+        # validate: 'logrotate -dv %s'
 
     - name: Configure logrotate extras
       ansible.builtin.template:
@@ -91,7 +94,7 @@
         dest: "/etc/logrotate.d/{{ item | basename | regex_replace('^logrotate-', '') }}"
         mode: '0644'
         backup: "{{ syslogclient_backup | default(false) }}"
-        validate: 'logrotate -dv %s'
+        # validate: 'logrotate -dv %s'
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
 - name: Linux Alpine
   when: ansible_distribution == 'Alpine'
@@ -110,3 +113,8 @@
         mode: '0644'
         backup: "{{ syslogclient_backup | default(false) }}"
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
+
+- name: Global logrotate configuration validation
+  ansible.builtin.command:
+    cmd: logrotate -dv /etc/logrotate.conf
+  changed_when: false
