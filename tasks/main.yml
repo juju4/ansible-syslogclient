@@ -1,30 +1,30 @@
 ---
 
 - name: Include distribution-specific variables
-  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts['distribution'] }}.yml"
 
 - name: Set fact is_container
   ansible.builtin.set_fact:
     is_container: true
   when: >
-    (ansible_virtualization_type is defined and
-      (ansible_virtualization_type == "docker"
-       or ansible_virtualization_type == "containerd"
-       or ansible_virtualization_type == "container"
+    (ansible_facts['virtualization_type'] is defined and
+      (ansible_facts['virtualization_type'] == "docker"
+       or ansible_facts['virtualization_type'] == "containerd"
+       or ansible_facts['virtualization_type'] == "container"
       )
     )
 
 - name: Import debian
   ansible.builtin.import_tasks: debian.yml
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts['os_family'] == 'Debian'
 
 - name: Import redhat
   ansible.builtin.import_tasks: redhat.yml
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['os_family'] == "RedHat"
 
 - name: Import alpine
   ansible.builtin.import_tasks: alpine.yml
-  when: ansible_distribution == 'Alpine'
+  when: ansible_facts['distribution'] == 'Alpine'
 
 - name: Ensure rsyslog-relp is present
   ansible.builtin.package:
@@ -38,29 +38,29 @@
     state: started
     enabled: yes
   when: >
-    ansible_os_family != "RedHat" and
+    ansible_facts['os_family'] != "RedHat" and
     not is_container|bool
 
 - name: Gather package facts
   ansible.builtin.package_facts:
     manager: auto
-  when: ansible_distribution != 'Alpine'
+  when: ansible_facts['distribution'] != 'Alpine'
 
 - name: Get rsyslog version
   ansible.builtin.set_fact:
     rsyslog_v: "{{ ansible_facts.packages['rsyslog'][0]['version'] }}"
-  when: ansible_distribution != 'Alpine'
+  when: ansible_facts['distribution'] != 'Alpine'
 
 - name: Alpine | get rsyslog version  # noqa risky-shell-pipe
   ansible.builtin.shell: "rsyslogd -v | awk 'match($0, /rsyslogd\\s+([0-9.]+)/, a) { print a[1] }'"
   changed_when: false
   register: rsyslog_v2
-  when: ansible_distribution == 'Alpine'
+  when: ansible_facts['distribution'] == 'Alpine'
 
 - name: Alpine | set rsyslog version
   ansible.builtin.set_fact:
     rsyslog_v: "{{ rsyslog_v2.stdout }}"
-  when: ansible_distribution == 'Alpine'
+  when: ansible_facts['distribution'] == 'Alpine'
 
 - name: Debug | rsyslog version
   ansible.builtin.debug:
@@ -108,9 +108,9 @@
       ansible.builtin.debug:
         var: syslogclient_server
 
-- name: Debug | ansible_virtualization_type
+- name: Debug | ansible_facts['virtualization_type']
   ansible.builtin.debug:
-    var: ansible_virtualization_type
+    var: ansible_facts['virtualization_type']
 - name: Container config cleaning
   ansible.builtin.replace:  # noqa no-tabs
     dest: "{{ item.f }}"
@@ -134,7 +134,7 @@
     - Restart rsyslog
   when:
     - is_container|bool
-    - ansible_distribution == "Ubuntu"
+    - ansible_facts['distribution'] == "Ubuntu"
 
 - name: Json
   when: syslogclient_use_json is defined and syslogclient_use_json | bool
@@ -155,7 +155,7 @@
   when:
     - syslogclient_forward_auditd | bool
     - not is_container|bool
-    - not (ansible_distribution == 'RedHat' and ansible_distribution_major_version|int == 8)
+    - not (ansible_facts['distribution'] == 'RedHat' and ansible_facts['distribution_major_version']|int == 8)
 
 - name: Import logrotate
   ansible.builtin.import_tasks: logrotate.yml
@@ -163,5 +163,5 @@
 - name: Import journald
   ansible.builtin.import_tasks: journald.yml
   when: >
-    (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7) or
-    (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 16)
+    (ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version']|int >= 7) or
+    (ansible_facts['distribution'] == 'Ubuntu' and ansible_facts['distribution_major_version']|int >= 16)

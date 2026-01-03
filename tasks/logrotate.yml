@@ -75,7 +75,7 @@
 
 # validation failed on Alpine if files don't exist
 - name: Linux Not Alpine
-  when: ansible_distribution != 'Alpine'
+  when: ansible_facts['distribution'] != 'Alpine'
   block:
     - name: Configure logrotate
       ansible.builtin.template:
@@ -97,7 +97,7 @@
         # validate: 'logrotate -dv %s'
       with_items: "{{ syslogclient_logrotate_syslog_template_extras }}"
 - name: Linux Alpine
-  when: ansible_distribution == 'Alpine'
+  when: ansible_facts['distribution'] == 'Alpine'
   block:
     - name: Alpine | Configure logrotate
       ansible.builtin.template:
