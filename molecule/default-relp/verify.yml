@@ -9,17 +9,17 @@
       - /etc/rsyslog.d/10-remote-syslog-relp.conf
     is_container: false
   pre_tasks:
-    - name: Debug | var ansible_virtualization_type
+    - name: Debug | var ansible_facts['virtualization_type']
       ansible.builtin.debug:
-        var: ansible_virtualization_type
+        var: ansible_facts['virtualization_type']
     - name: Set fact is_container
       ansible.builtin.set_fact:
         is_container: true
       when: >
-        (ansible_virtualization_type is defined and
-          (ansible_virtualization_type == "docker"
-           or ansible_virtualization_type == "containerd"
-           or ansible_virtualization_type == "container"
+        (ansible_facts['virtualization_type'] is defined and
+          (ansible_facts['virtualization_type'] == "docker"
+           or ansible_facts['virtualization_type'] == "containerd"
+           or ansible_facts['virtualization_type'] == "container"
           )
         )
     - name: Debian | set fact
@@ -27,7 +27,7 @@
         files_test:
           - /etc/rsyslog.d/10-remote-syslog.conf
           - /etc/rsyslog.d/10-remote-syslog-relp.conf
-      when: ansible_distribution == 'Debian' or ansible_os_family == 'RedHat'
+      when: ansible_facts['distribution'] == 'Debian' or ansible_facts['os_family'] == 'RedHat'
   tasks:
     - name: Ensure rsyslog config is present
       ansible.builtin.stat:
@@ -59,6 +59,6 @@
     - name: Ensure year is present (full timestamp)
       ansible.builtin.assert:
         that:
-          - "ansible_date_time.year in logs.stdout"
+          - "ansible_facts['date_time'].year in logs.stdout"
       failed_when:
         - not is_container|bool
