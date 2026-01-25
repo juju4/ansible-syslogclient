@@ -1,0 +1,4 @@
+{{ ansible_managed | comment }}
+# Don't log otelcol-contrib internal logging to rsyslogd
+# Risk of high volume and cpu load when repeated errors
+if ($programname == 'otelcol-contrib') then stop
