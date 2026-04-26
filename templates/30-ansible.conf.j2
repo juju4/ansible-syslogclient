@@ -5,6 +5,12 @@ if ($programname == 'python' or $programname startswith 'python3') then {{ syslo
 {% else %}
 & stop
 {% endif %}
+if ($msg startswith 'ansible-ansible.') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
+{% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
+& ~
+{% else %}
+& stop
+{% endif %}
 if ($programname contains 'ansible-') then {{ syslogclient_ansible_syslog_target | default('/var/log/ansible/python.log') }}
 {% if rsyslog_v is defined and rsyslog_v and rsyslog_v|string is version_compare('8.0', '<') %}
 & ~
