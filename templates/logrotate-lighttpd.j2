@@ -1,0 +1,29 @@
+{{ ansible_managed | comment }}
+
+/var/log/lighttpd/*.log {
+    {{ syslogclient_logrotate_period }}
+    missingok
+    rotate {{ syslogclient_logrotate_rotate|int }}
+{% if syslogclient_logrotate_datext %}
+        dateext
+        dateformat {{ syslogclient_logrotate_datformat }}
+{% endif%}
+{% if syslogclient_logrotate_compress %}
+        compress
+        delaycompress
+{% endif %}
+        notifempty
+        sharedscripts
+        postrotate
+             if [ -x /usr/sbin/invoke-rc.d ]; then \
+                invoke-rc.d lighttpd reopen-logs > /dev/null 2>&1; \
+             else \
+                /etc/init.d/lighttpd reopen-logs > /dev/null 2>&1; \
+             fi;
+{% if syslog_postrotate_extras_cmd is defined %}
+{%     for cmd in syslog_postrotate_extras_cmd %}
+                {{ cmd }}
+{%     endfor %}
+{% endif %}
+        endscript
+}
