@@ -1,6 +1,7 @@
+# Remote syslog client ansible role
+
 [![Actions Status - Main](https://github.com/juju4/ansible-syslogclient/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-syslogclient/actions?query=branch%3Amain)
 [![Actions Status - Devel](https://github.com/juju4/ansible-syslogclient/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-syslogclient/actions?query=branch%3Adevel)
-# Remote syslog client ansible role
 
 A simple ansible role to setup system to send syslog to remote system
 For more advanced usage like TLS, you are encouraged to look other roles like [Debops Rsyslog](https://github.com/debops/ansible-rsyslog)
